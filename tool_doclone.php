@@ -297,7 +297,7 @@ echo 'adding section..';
 					$all
 				);
 
-				foreach($all as $is_code) {
+				foreach($all as &$is_code) {
 					
 					$database->build_and_execute(
 						"update",
