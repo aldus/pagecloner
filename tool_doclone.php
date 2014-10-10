@@ -274,11 +274,11 @@ echo 'adding section..';
         	case 'code':
 				$query = "SELECT * FROM ".TABLE_PREFIX."mod_code WHERE section_id = '$from_section'";
 				$get_code = $database->query($query);	 
-				while ($is_code=$get_code->fetchRow()) {
-						// Update new section with cloned data
-						$content = addslashes($is_code['content']);
-						$database->query("UPDATE ".TABLE_PREFIX."mod_code SET content = '$content' WHERE section_id = '$section_id'");
-					}
+				while ($is_code=$get_code->fetchRow( MYSQL_ASSOC )) {
+					// Update new section with cloned data
+					$content = addslashes($is_code['content']);
+					$database->query("UPDATE ".TABLE_PREFIX."mod_code SET content = '$content' WHERE section_id = '$section_id'");
+				}
 				break;
 			
 			case 'code2':
@@ -288,17 +288,23 @@ echo 'adding section..';
 				*	@author		Dietrich Roland Pehlke (aldus)
 				*	@package	LEPTON-CMS - Modules: page-cloner
 				*/
+
 				$all = array();
-				$query = "SELECT * FROM `".TABLE_PREFIX."mod_code2` WHERE `section_id` =".$from_section;
+
 				$database->execute_query(
-					$query,
+					"SELECT `content`,`whatis` FROM `".TABLE_PREFIX."mod_code2` WHERE `section_id` =".$from_section,
 					true,
 					$all
 				);
+
 				foreach($all as $is_code) {
-					// Update new section with cloned data
-					$content = addslashes($is_code['content']);
-					$database->query("UPDATE ".TABLE_PREFIX."mod_code2 SET content =\"".$content."\", whatis=".$is_code['whatis']." WHERE section_id =".$section_id );
+					
+					$database->build_and_execute(
+						"update",
+						TABLE_PREFIX."mod_code2",
+						$is_code,
+						"section_id =".$section_id
+					);
 				}
 				break;
 		}
