@@ -1,0 +1,63 @@
+<!-- BEGIN main_block -->
+
+<br />
+
+</div>
+<div class="{DISPLAY_ADD}">
+
+<h3>{HEADING_ADD_PAGE}</h3>
+
+<form name="add" action="tool_doclone.php" method="post">
+<table cellpadding="2" cellspacing="0" border="0" width="100%" align="center">
+<tr>
+	<td width="140" height="20">{TEXT_TITLE}:</td>
+	<td with="240" height="20">
+		<input type="text" name="title" value="{TEXT_DEFAULT}" style="width: 232px;" />
+	</td>
+</tr>
+<tr height="20">
+	<td width="140">{TEXT_PARENT}:</td>
+	<td with="240">
+		<select name="parent" style="width: 240px;">
+			<!-- BEGIN page_list_block2 -->
+			<option value="{ID}"{DISABLED}>{TITLE}</option>
+			<!-- END page_list_block2 -->
+		</select>
+	</td>
+</tr>
+<tr height="20">
+	<td width="140">{TEXT_INCLUDE_SUBS}:</td>
+	<td with="240">
+		<input type="checkbox" name="include_subs" value="include_subs" />
+	</td>
+</tr>
+<tr>
+	<td width="70">&nbsp;</td>
+	<td colspan="4">
+		<input type="hidden" name="pagetoclone" value="{TEXT_PAGETODO}"  />
+		<input type="submit" name="submit" value="{TEXT_ADD}" style="width: 117px;" />
+		<input type="reset" name="reset" value="{TEXT_RESET}" style="width: 117px;" />
+	</td>
+</tr>
+<tr>
+	<td>&nbsp;</td>
+	<td>&nbsp;</td>
+</tr>
+</table>
+
+</form>
+
+</div>
+<div class="{DISPLAY_INTRO}" style="padding-top: 10px;">
+
+<br />
+
+<h2>{HEADING_MODIFY_INTRO_PAGE}</h2>
+
+<a href="intro.php">
+{INTRO_LINK}
+</a>
+
+</div>
+
+<!-- END main_block -->
