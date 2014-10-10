@@ -113,7 +113,7 @@ echo 'cloning---'.$pagetoclone.' to '.$parent;
 	
 	// Get the page id
 	global $page_id;
-	$page_id = $database->get_one("SELECT LAST_INSERT_ID()");
+	$page_id = $database->db_handle->lastInsertId();
 	
 	// Work out level
 	$level = level_count($page_id);
@@ -138,31 +138,40 @@ echo 'cloning---'.$pagetoclone.' to '.$parent;
 		$all_sections
 	);	 
 	
-	foreach($all_sections as $is_section) {
+	foreach($all_sections as &$is_section) {
 
-echo 'adding section..';
+		echo '<p>Adding section ...</p>';
 
 		// Add new record into the sections table
 		$from_section = $is_section['section_id'];
 		$position = $is_section['position'];
-		$module = $is_section['module'];
-		$block = $is_section['block'];
-		$publ_start = $is_section['publ_start'];
-		$publ_end = $is_section['publ_end'];
-		$database->query("INSERT INTO ".TABLE_PREFIX."sections (page_id,position,module,block,publ_start,publ_end) VALUES ('$page_id','$position', '$module','$block','$publ_start','$publ_end')");
+
+		$fields = array(
+			'page_id'	=> $page_id,
+			'position'	=> $is_section['position'],
+			'module'	=> $is_section['module'],
+			'block'		=> $is_section['block'],
+			'publ_start' => $is_section['publ_start'],
+			'publ_end'	=> $is_section['publ_end']
+		);
+		
+		$database->build_and_execute(
+			"insert",
+			TABLE_PREFIX."sections",
+			$fields
+		);
 	
 		// Get the section id
 		global $section_id;
-		$section_id = $database->get_one("SELECT LAST_INSERT_ID()");
+		$section_id = $database->db_handle->lastInsertId();
 	
 		// Include the selected modules add file if it exists
-		if(file_exists(LEPTON_PATH.'/modules/'.$module.'/add.php')) {
-			//echo '<br>Executing '.$module.'/add.php';
-			require(LEPTON_PATH.'/modules/'.$module.'/add.php');
+		if(file_exists(LEPTON_PATH.'/modules/'.$is_section['module'].'/add.php')) {
+			require(LEPTON_PATH.'/modules/'.$is_section['module'].'/add.php');
 		}
 		
 		// copy module settings per section
-		switch( $module ) {
+		switch( $is_section['module'] ) {
 		
 			case 'wysiwyg':
 				/**
@@ -360,7 +369,7 @@ echo 'adding section..';
 		}
 	}
 	
-	echo 'done - newpageid='.$page_id.' <br>';
+	echo '<p>Done - new pageid= '.$page_id.'</p>';
 	return $page_id;
 }
 
@@ -373,22 +382,22 @@ function clone_subs($pagetoclone,$parent) {
 	
 	if($get_subpages->numRows() > 0)	{
 		while($page = $get_subpages->fetchRow( MYSQL_ASSOC )) {
-			echo 'clonepage('.$page['page_title'].','.$parent.','.$page['page_id'].')<br>';
+			echo '<p>clonepage('.$page['page_title'].','.$parent.','.$page['page_id'].')</p>>';
 			$newnew_page = clone_page($page['page_title'],$parent,$page['page_id']);
-			echo 'clonesubs('.$page['page_id'].','.$newnew_page.')<hr>';
+			echo '<p>clonesubs('.$page['page_id'].','.$newnew_page.')</p><hr />';
 			clone_subs($page['page_id'],$newnew_page);
 		}
 	}
 }
 
 // Clone selected page
-echo 'clonepage('.$title.','.$parent.','.$pagetoclone.')<br>';
+echo '<p>clonepage('.$title.','.$parent.','.$pagetoclone.')</p>';
 $new_page = clone_page($title,$parent,$pagetoclone);
-echo 'new_pageid='.$new_page.'<hr>';
+echo '<p>new_pageid='.$new_page.'</p><hr>';
 
 // Check if we need to clone subpages?
 if ($include_subs == '1') {
-	echo 'cloning subs('.$pagetoclone.','.$new_page.')<hr>';
+	echo '<p>cloning subs('.$pagetoclone.','.$new_page.')</p><hr>';
 	clone_subs($pagetoclone,$new_page);
 }
 	
