@@ -176,7 +176,7 @@ echo 'adding section..';
 					$all
 				);	 
 
-				foreach($all as $is_wysiwyg) {
+				foreach($all as &$is_wysiwyg) {
 
 					$database->build_and_execute(
 						"update",
@@ -189,34 +189,72 @@ echo 'adding section..';
 				break;
 				
 			case 'form':
-				$query = "SELECT * FROM ".TABLE_PREFIX."mod_form_settings WHERE section_id = '$from_section'";
-				$get_formsettings = $database->query($query);	 
-				while ($is_formsettings=$get_formsettings->fetchRow()) {
-						// Update formsettings section with cloned data
-						$header = addslashes($is_formsettings['header']);
-						$field_loop = addslashes($is_formsettings['field_loop']);
-						$footer = addslashes($is_formsettings['footer']);
-						$email_to = addslashes($is_formsettings['email_to']);
-						$email_from = addslashes($is_formsettings['email_from']);
-						$email_subject = addslashes($is_formsettings['email_subject']);
-						$success_message = addslashes($is_formsettings['success_message']);
-						$stored_submissions = $is_formsettings['stored_submissions'];
-						$max_submissions = $is_formsettings['max_submissions'];
-						$use_captcha = $is_formsettings['use_captcha'];
-						$database->query("UPDATE ".TABLE_PREFIX."mod_form_settings SET header = '$header', field_loop = '$field_loop', footer = '$footer', email_to = '$email_to', email_from = '$email_from', email_subject = '$email_subject', success_message = '$success_message', max_submissions = '$max_submissions', stored_submissions = '$stored_submissions', use_captcha = '$use_captcha' WHERE section_id = '$section_id'");
-				}	
-				$query = "SELECT * FROM ".TABLE_PREFIX."mod_form_fields WHERE section_id = '$from_section'";
-				$get_formfield = $database->query($query);	 
-				while ($is_formfield=$get_formfield->fetchRow()) {
-						// Insert formfields with cloned data
-						$position = $is_formfield['position'];
-						$title = addslashes($is_formfield['title']);
-						$type = $is_formfield['type'];
-						$required = $is_formfield['required'];
-						$value = $is_formfield['value'];
-						$extra = addslashes($is_formfield['extra']);
-						$database->query("INSERT INTO ".TABLE_PREFIX."mod_form_fields (section_id, page_id, position, title, type, required, value, extra) VALUES ('$section_id','$page_id','$position','$title','$type','$required','$value','$extra')");
+				/**
+				 *	Form settings
+				 */
+				$fields = array(
+					'header', 'field_loop', 'footer', 'email_to', 'email_from', 
+					'email_subject', 'success_page', 'success_email_to', 
+					'success_email_from', 'stored_submissions', 'success_email_fromname', 
+					'success_email_subject', 'max_submissions', 'use_captcha'
+				);
+				
+				$query = $database->build_mysql_query(
+					'select',
+					TABLE_PREFIX."mod_form_settings",
+					$fields,
+					"`section_id` = '".$from_section."'"
+				);
+				
+				$all = array();
+				$database->execute_query( 
+					$query,
+					true,
+					$all
+				);
+				
+				foreach($all as &$is_formsettings) {
+					$database->build_and_execute(
+						"update",
+						TABLE_PREFIX."mod_form_settings",
+						$is_formsettings,
+						"section_id =".$section_id
+					);
 				}
+				
+				/**
+				 *	Form fields
+				 */
+			
+				$fields = array(
+					'position', 'title', 'type', 'required', 'value', 'extra'
+				);
+				
+				$query = $database->build_mysql_query(
+					'select',
+					TABLE_PREFIX."mod_form_fields",
+					$fields,
+					"`section_id` = '".$from_section."'"
+				);
+				
+				$all = array();
+				$database->execute_query(
+					$query,
+					true,
+					$all
+				);
+				
+				foreach($all as &$is_formfield) {
+					$is_formfield['section_id'] = $section_id;
+					$is_formfield['page_id'] = $page_id;
+					
+					$database->build_and_execute(
+						"insert",
+						TABLE_PREFIX."mod_form_fields",
+						$is_formfield
+					);
+				}	
+				
 				break;
 			
 			case 'mpform':
