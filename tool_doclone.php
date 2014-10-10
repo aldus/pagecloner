@@ -165,14 +165,26 @@ echo 'adding section..';
 		switch( $module ) {
 		
 			case 'wysiwyg':
-				$query = "SELECT * FROM ".TABLE_PREFIX."mod_wysiwyg WHERE section_id = '$from_section'";
-				$get_wysiwyg = $database->query($query);	 
-				while ($is_wysiwyg=$get_wysiwyg->fetchRow()) {
-					// Update wysiwyg section with cloned data
-					$content = addslashes($is_wysiwyg['content']);
-					$text = addslashes($is_wysiwyg['text']);
-					$query = "UPDATE ".TABLE_PREFIX."mod_wysiwyg SET content = '$content', text = '$text' WHERE section_id = '$section_id'";
-					$database->query($query);	
+				/**
+				 *	Recode for LEPTON-CMS 2
+				 */
+				$all = array();
+				
+				$database->execute_query(
+					"SELECT `content`,`text` FROM `".TABLE_PREFIX."mod_wysiwyg` WHERE `section_id` = '".$from_section."'",
+					true,
+					$all
+				);	 
+
+				foreach($all as $is_wysiwyg) {
+
+					$database->build_and_execute(
+						"update",
+						TABLE_PREFIX."mod_wysiwyg",
+						$is_wysiwyg,
+						"section_id =".$section_id
+					);
+
 				}
 				break;
 				
