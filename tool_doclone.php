@@ -131,9 +131,14 @@ echo 'cloning---'.$pagetoclone.' to '.$parent;
 	create_access_file($filename, $page_id, $level);
 	
 	// Make new sections, database
-	$query = "SELECT * FROM ".TABLE_PREFIX."sections WHERE page_id = '$pagetoclone'";
-	$get_section = $database->query($query);	 
-	while ($is_section=$get_section->fetchRow( MYSQL_ASSOC )) {
+	$all_sections = array();
+	$database->execute_query(
+		"SELECT * FROM `".TABLE_PREFIX."sections` WHERE `page_id` = '".$pagetoclone."'",
+		true,
+		$all_sections
+	);	 
+	
+	foreach($all_sections as $is_section) {
 
 echo 'adding section..';
 
@@ -157,137 +162,149 @@ echo 'adding section..';
 		}
 		
 		// copy module settings per section
-		if ($module=='wysiwyg') {
-			$query = "SELECT * FROM ".TABLE_PREFIX."mod_wysiwyg WHERE section_id = '$from_section'";
-			$get_wysiwyg = $database->query($query);	 
-			while ($is_wysiwyg=$get_wysiwyg->fetchRow()) {
-				// Update wysiwyg section with cloned data
-				$content = addslashes($is_wysiwyg['content']);
-				$text = addslashes($is_wysiwyg['text']);
-				$query = "UPDATE ".TABLE_PREFIX."mod_wysiwyg SET content = '$content', text = '$text' WHERE section_id = '$section_id'";
-				$database->query($query);	
-			}	
-		} elseif ($module=='form') {
-			$query = "SELECT * FROM ".TABLE_PREFIX."mod_form_settings WHERE section_id = '$from_section'";
-			$get_formsettings = $database->query($query);	 
-			while ($is_formsettings=$get_formsettings->fetchRow()) {
-					// Update formsettings section with cloned data
-					$header = addslashes($is_formsettings['header']);
-					$field_loop = addslashes($is_formsettings['field_loop']);
-					$footer = addslashes($is_formsettings['footer']);
-					$email_to = addslashes($is_formsettings['email_to']);
-					$email_from = addslashes($is_formsettings['email_from']);
-					$email_subject = addslashes($is_formsettings['email_subject']);
-					$success_message = addslashes($is_formsettings['success_message']);
-					$stored_submissions = $is_formsettings['stored_submissions'];
-					$max_submissions = $is_formsettings['max_submissions'];
-					$use_captcha = $is_formsettings['use_captcha'];
-					$database->query("UPDATE ".TABLE_PREFIX."mod_form_settings SET header = '$header', field_loop = '$field_loop', footer = '$footer', email_to = '$email_to', email_from = '$email_from', email_subject = '$email_subject', success_message = '$success_message', max_submissions = '$max_submissions', stored_submissions = '$stored_submissions', use_captcha = '$use_captcha' WHERE section_id = '$section_id'");
-			}	
-	 		$query = "SELECT * FROM ".TABLE_PREFIX."mod_form_fields WHERE section_id = '$from_section'";
-			$get_formfield = $database->query($query);	 
-			while ($is_formfield=$get_formfield->fetchRow()) {
-					// Insert formfields with cloned data
-					$position = $is_formfield['position'];
-					$title = addslashes($is_formfield['title']);
-					$type = $is_formfield['type'];
-					$required = $is_formfield['required'];
-					$value = $is_formfield['value'];
-					$extra = addslashes($is_formfield['extra']);
-					$database->query("INSERT INTO ".TABLE_PREFIX."mod_form_fields (section_id, page_id, position, title, type, required, value, extra) VALUES ('$section_id','$page_id','$position','$title','$type','$required','$value','$extra')");
-			}	
-		} elseif ($module=='mpform') {
-        	/**
-        	*	@version	0.5.2
-        	*	@date		2010-08-08
-        	*	@author		Stephan Kuehn (vBoedefeld)
-        	*	@package	Websitebaker - Modules: page-cloner
-        	*	@state		RC
-        	*	@notice		Just add type "mpform" for MPForm-module
-        	*/
-        	$query = "SELECT * FROM ".TABLE_PREFIX."mod_mpform_settings WHERE section_id = '$from_section'";
-        	$get_formsettings = $database->query($query);	 
-        	while ($is_formsettings=$get_formsettings->fetchRow()) {
-        			// Update formsettings section with cloned data
-        			$header = addslashes($is_formsettings['header']);
-        			$field_loop = addslashes($is_formsettings['field_loop']);
-        			$footer = addslashes($is_formsettings['footer']);
-        			$email_to = addslashes($is_formsettings['email_to']);
-        			$email_from = addslashes($is_formsettings['email_from']);
-        			$email_fromname = addslashes($is_formsettings['email_fromname']);
-        			$email_subject = addslashes($is_formsettings['email_subject']);
-        			$email_text = addslashes($is_formsettings['email_text']);
-        			$success_page = addslashes($is_formsettings['success_page']);
-        			$success_text = addslashes($is_formsettings['success_text']);
-        			$submissions_text = addslashes($is_formsettings['submissions_text']);
-        			$success_email_to= addslashes($is_formsettings['success_email_to']);
-        			$success_email_from = addslashes($is_formsettings['success_email_from']);
-        			$success_email_fromname = addslashes($is_formsettings['success_email_fromname']);
-        			$success_email_text = addslashes($is_formsettings['success_email_text']);
-        			$success_email_subject = addslashes($is_formsettings['success_email_subject']);
-        			$stored_submissions = $is_formsettings['stored_submissions'];
-        			$max_submissions = $is_formsettings['max_submissions'];
-        			$heading_html = addslashes($is_formsettings['heading_html']);
-        			$short_html = addslashes($is_formsettings['short_html']);
-        			$long_html = addslashes($is_formsettings['long_html']);
-        			$email_html = addslashes($is_formsettings['email_html']);
-        			$uploadfile_html = addslashes($is_formsettings['uploadfile_html']);
-        			$use_captcha = $is_formsettings['use_captcha'];
-        			$upload_files_folder = addslashes($is_formsettings['upload_files_folder']);
-        			$date_format = addslashes($is_formsettings['date_format']);
-        			$max_file_size_kb= $is_formsettings['max_file_size_kb'];
-        			$attach_file = $is_formsettings['attach_file'];
-        			$upload_file_mask = addslashes($is_formsettings['upload_file_mask']);
-        			$upload_dir_mask = addslashes($is_formsettings['upload_dir_mask']);
-        			$upload_only_exts = addslashes($is_formsettings['upload_only_exts']);
-        			$is_following = $is_formsettings['is_following'];
-        			$tbl_suffix = addslashes($is_formsettings['tbl_suffix']);
-        			$enum_start = addslashes($is_formsettings['enum_start']);
-              $database->query("UPDATE ".TABLE_PREFIX."mod_mpform_settings SET header = '$header', field_loop = '$field_loop', footer = '$footer', email_to = '$email_to', email_from = '$email_from', email_fromname = '$email_fromname', email_subject = '$email_subject', email_text = '$email_text', success_page = '$success_page', success_text = '$success_text', submissions_text = '$submissions_text', success_email_to = '$success_email_to', success_email_from = '$success_email_from', success_email_fromname = '$success_email_fromname', success_email_text = '$success_email_text', success_email_subject = '$success_email_subject', stored_submissions = '$stored_submissions', max_submissions = '$max_submissions', heading_html = '$heading_html', short_html = '$short_html', long_html = '$long_html', email_html = '$email_html', uploadfile_html = '$uploadfile_html', use_captcha = '$use_captcha', upload_files_folder = '$upload_files_folder', date_format = '$date_format', max_file_size_kb = '$max_file_size_kb', attach_file = '$attach_file', upload_file_mask = '$upload_file_mask', upload_dir_mask = '$upload_dir_mask', upload_only_exts = '$upload_only_exts', is_following = '$is_following', tbl_suffix = '$tbl_suffix', enum_start = '$enum_start' WHERE section_id = '$section_id'");
-        	}	
-         	$query = "SELECT * FROM ".TABLE_PREFIX."mod_mpform_fields WHERE section_id = '$from_section'";
-        	$get_formfield = $database->query($query);	 
-        	while ($is_formfield=$get_formfield->fetchRow()) {
-        			// Insert formfields with cloned data
-        			$position = $is_formfield['position'];
-        			$title = addslashes($is_formfield['title']);
-        			$type = $is_formfield['type'];
-        			$required = $is_formfield['required'];
-        			$value = $is_formfield['value'];
-        			$extra = addslashes($is_formfield['extra']);
-        			$help = addslashes($is_formfield['help']);
-        			$database->query("INSERT INTO ".TABLE_PREFIX."mod_mpform_fields (section_id, page_id, position, title, type, required, value, extra, help) VALUES ('$section_id','$page_id','$position','$title','$type','$required','$value','$extra', '$help')");
-        	}	
-        } elseif ($module=='code') {
-			$query = "SELECT * FROM ".TABLE_PREFIX."mod_code WHERE section_id = '$from_section'";
-			$get_code = $database->query($query);	 
-			while ($is_code=$get_code->fetchRow()) {
+		switch( $module ) {
+		
+			case 'wysiwyg':
+				$query = "SELECT * FROM ".TABLE_PREFIX."mod_wysiwyg WHERE section_id = '$from_section'";
+				$get_wysiwyg = $database->query($query);	 
+				while ($is_wysiwyg=$get_wysiwyg->fetchRow()) {
+					// Update wysiwyg section with cloned data
+					$content = addslashes($is_wysiwyg['content']);
+					$text = addslashes($is_wysiwyg['text']);
+					$query = "UPDATE ".TABLE_PREFIX."mod_wysiwyg SET content = '$content', text = '$text' WHERE section_id = '$section_id'";
+					$database->query($query);	
+				}
+				break;
+				
+			case 'form':
+				$query = "SELECT * FROM ".TABLE_PREFIX."mod_form_settings WHERE section_id = '$from_section'";
+				$get_formsettings = $database->query($query);	 
+				while ($is_formsettings=$get_formsettings->fetchRow()) {
+						// Update formsettings section with cloned data
+						$header = addslashes($is_formsettings['header']);
+						$field_loop = addslashes($is_formsettings['field_loop']);
+						$footer = addslashes($is_formsettings['footer']);
+						$email_to = addslashes($is_formsettings['email_to']);
+						$email_from = addslashes($is_formsettings['email_from']);
+						$email_subject = addslashes($is_formsettings['email_subject']);
+						$success_message = addslashes($is_formsettings['success_message']);
+						$stored_submissions = $is_formsettings['stored_submissions'];
+						$max_submissions = $is_formsettings['max_submissions'];
+						$use_captcha = $is_formsettings['use_captcha'];
+						$database->query("UPDATE ".TABLE_PREFIX."mod_form_settings SET header = '$header', field_loop = '$field_loop', footer = '$footer', email_to = '$email_to', email_from = '$email_from', email_subject = '$email_subject', success_message = '$success_message', max_submissions = '$max_submissions', stored_submissions = '$stored_submissions', use_captcha = '$use_captcha' WHERE section_id = '$section_id'");
+				}	
+				$query = "SELECT * FROM ".TABLE_PREFIX."mod_form_fields WHERE section_id = '$from_section'";
+				$get_formfield = $database->query($query);	 
+				while ($is_formfield=$get_formfield->fetchRow()) {
+						// Insert formfields with cloned data
+						$position = $is_formfield['position'];
+						$title = addslashes($is_formfield['title']);
+						$type = $is_formfield['type'];
+						$required = $is_formfield['required'];
+						$value = $is_formfield['value'];
+						$extra = addslashes($is_formfield['extra']);
+						$database->query("INSERT INTO ".TABLE_PREFIX."mod_form_fields (section_id, page_id, position, title, type, required, value, extra) VALUES ('$section_id','$page_id','$position','$title','$type','$required','$value','$extra')");
+				}
+				break;
+			
+			case 'mpform':
+				/**
+				*	@version	0.5.2
+				*	@date		2010-08-08
+				*	@author		Stephan Kuehn (vBoedefeld)
+				*	@package	Websitebaker - Modules: page-cloner
+				*	@state		RC
+				*	@notice		Just add type "mpform" for MPForm-module
+				*/
+				$query = "SELECT * FROM ".TABLE_PREFIX."mod_mpform_settings WHERE section_id = '$from_section'";
+				$get_formsettings = $database->query($query);	 
+				while ($is_formsettings=$get_formsettings->fetchRow()) {
+						// Update formsettings section with cloned data
+						$header = addslashes($is_formsettings['header']);
+						$field_loop = addslashes($is_formsettings['field_loop']);
+						$footer = addslashes($is_formsettings['footer']);
+						$email_to = addslashes($is_formsettings['email_to']);
+						$email_from = addslashes($is_formsettings['email_from']);
+						$email_fromname = addslashes($is_formsettings['email_fromname']);
+						$email_subject = addslashes($is_formsettings['email_subject']);
+						$email_text = addslashes($is_formsettings['email_text']);
+						$success_page = addslashes($is_formsettings['success_page']);
+						$success_text = addslashes($is_formsettings['success_text']);
+						$submissions_text = addslashes($is_formsettings['submissions_text']);
+						$success_email_to= addslashes($is_formsettings['success_email_to']);
+						$success_email_from = addslashes($is_formsettings['success_email_from']);
+						$success_email_fromname = addslashes($is_formsettings['success_email_fromname']);
+						$success_email_text = addslashes($is_formsettings['success_email_text']);
+						$success_email_subject = addslashes($is_formsettings['success_email_subject']);
+						$stored_submissions = $is_formsettings['stored_submissions'];
+						$max_submissions = $is_formsettings['max_submissions'];
+						$heading_html = addslashes($is_formsettings['heading_html']);
+						$short_html = addslashes($is_formsettings['short_html']);
+						$long_html = addslashes($is_formsettings['long_html']);
+						$email_html = addslashes($is_formsettings['email_html']);
+						$uploadfile_html = addslashes($is_formsettings['uploadfile_html']);
+						$use_captcha = $is_formsettings['use_captcha'];
+						$upload_files_folder = addslashes($is_formsettings['upload_files_folder']);
+						$date_format = addslashes($is_formsettings['date_format']);
+						$max_file_size_kb= $is_formsettings['max_file_size_kb'];
+						$attach_file = $is_formsettings['attach_file'];
+						$upload_file_mask = addslashes($is_formsettings['upload_file_mask']);
+						$upload_dir_mask = addslashes($is_formsettings['upload_dir_mask']);
+						$upload_only_exts = addslashes($is_formsettings['upload_only_exts']);
+						$is_following = $is_formsettings['is_following'];
+						$tbl_suffix = addslashes($is_formsettings['tbl_suffix']);
+						$enum_start = addslashes($is_formsettings['enum_start']);
+				  $database->query("UPDATE ".TABLE_PREFIX."mod_mpform_settings SET header = '$header', field_loop = '$field_loop', footer = '$footer', email_to = '$email_to', email_from = '$email_from', email_fromname = '$email_fromname', email_subject = '$email_subject', email_text = '$email_text', success_page = '$success_page', success_text = '$success_text', submissions_text = '$submissions_text', success_email_to = '$success_email_to', success_email_from = '$success_email_from', success_email_fromname = '$success_email_fromname', success_email_text = '$success_email_text', success_email_subject = '$success_email_subject', stored_submissions = '$stored_submissions', max_submissions = '$max_submissions', heading_html = '$heading_html', short_html = '$short_html', long_html = '$long_html', email_html = '$email_html', uploadfile_html = '$uploadfile_html', use_captcha = '$use_captcha', upload_files_folder = '$upload_files_folder', date_format = '$date_format', max_file_size_kb = '$max_file_size_kb', attach_file = '$attach_file', upload_file_mask = '$upload_file_mask', upload_dir_mask = '$upload_dir_mask', upload_only_exts = '$upload_only_exts', is_following = '$is_following', tbl_suffix = '$tbl_suffix', enum_start = '$enum_start' WHERE section_id = '$section_id'");
+				}	
+				$query = "SELECT * FROM ".TABLE_PREFIX."mod_mpform_fields WHERE section_id = '$from_section'";
+				$get_formfield = $database->query($query);	 
+				while ($is_formfield=$get_formfield->fetchRow()) {
+						// Insert formfields with cloned data
+						$position = $is_formfield['position'];
+						$title = addslashes($is_formfield['title']);
+						$type = $is_formfield['type'];
+						$required = $is_formfield['required'];
+						$value = $is_formfield['value'];
+						$extra = addslashes($is_formfield['extra']);
+						$help = addslashes($is_formfield['help']);
+						$database->query("INSERT INTO ".TABLE_PREFIX."mod_mpform_fields (section_id, page_id, position, title, type, required, value, extra, help) VALUES ('$section_id','$page_id','$position','$title','$type','$required','$value','$extra', '$help')");
+				}
+				break;
+        	
+        	case 'code':
+				$query = "SELECT * FROM ".TABLE_PREFIX."mod_code WHERE section_id = '$from_section'";
+				$get_code = $database->query($query);	 
+				while ($is_code=$get_code->fetchRow()) {
+						// Update new section with cloned data
+						$content = addslashes($is_code['content']);
+						$database->query("UPDATE ".TABLE_PREFIX."mod_code SET content = '$content' WHERE section_id = '$section_id'");
+					}
+				break;
+			
+			case 'code2':
+				/**
+				*	@version	1.0.0
+				*	@date		2014-10-10
+				*	@author		Dietrich Roland Pehlke (aldus)
+				*	@package	LEPTON-CMS - Modules: page-cloner
+				*/
+				$all = array();
+				$query = "SELECT * FROM `".TABLE_PREFIX."mod_code2` WHERE `section_id` =".$from_section;
+				$database->execute_query(
+					$query,
+					true,
+					$all
+				);
+				foreach($all as $is_code) {
 					// Update new section with cloned data
 					$content = addslashes($is_code['content']);
-					$database->query("UPDATE ".TABLE_PREFIX."mod_code SET content = '$content' WHERE section_id = '$section_id'");
+					$database->query("UPDATE ".TABLE_PREFIX."mod_code2 SET content =\"".$content."\", whatis=".$is_code['whatis']." WHERE section_id =".$section_id );
 				}
-		} elseif ($module=='code2') {
-			/**
-			*	@version	1.0.0
-			*	@date		2014-10-10
-			*	@author		Dietrich Roland Pehlke (aldus)
-			*	@package	LEPTON-CMS - Modules: page-cloner
-			*/
-			$all = array();
-			$query = "SELECT * FROM `".TABLE_PREFIX."mod_code2` WHERE `section_id` =".$from_section;
-			$database->execute_query(
-				$query,
-				true,
-				$all
-			);
-			foreach($all as $is_code) {
-				// Update new section with cloned data
-				$content = addslashes($is_code['content']);
-				$database->query("UPDATE ".TABLE_PREFIX."mod_code2 SET content =\"".$content."\", whatis=".$is_code['whatis']." WHERE section_id =".$section_id );
-			}
+				break;
 		}
 	}
-echo 'done - newpageid='.$page_id.' <br>'	;
+	
+	echo 'done - newpageid='.$page_id.' <br>';
 	return $page_id;
 }
 
