@@ -7,10 +7,10 @@ Copying of complete datasets from pagesections to their clones is limited to fol
 modules: wywsiwyg, form, mpform, code, code2. 
 Only the sections (with their default) settings are cloned for not supported modules.
 
-## Authors
+### Authors
 John Maats, Christian Sommer, Dietrich Roland Pehlke, Stephan Kuehn, vBoedefeld, cms-lab
 
-## Changelog
+### Changelog
 
 - v 1.0.0 cms-lab
 	+ recode for LEPTON 2
