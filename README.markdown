@@ -16,7 +16,7 @@ John Maats, Christian Sommer, Dietrich Roland Pehlke, Stephan Kuehn, vBoedefeld,
 	+ recode for LEPTON 2
 	+ upload to Git  
 
-- v 0.5.4 (Stephan Kühn; 10. August 2010)
+- v 0.5.4 (Stephan K&uuml;hn; 10. August 2010)
 	+ mpform support
 	+ migrating the pagetree idea by pcwacht support 
         
