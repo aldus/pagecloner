@@ -29,8 +29,8 @@
 
 {% macro display_page( pages, TEXT, MOD_PAGECLONER, THEME_URL, LEPTON_URL ) %}	
 		<ul id="p{{ pages[0].current_parent }}" {% if pages[0].current_parent != 0 %} class="page_list" {% endif %}>
-			{# schleife mit den unterseiten anfang #}
-			{% for page in pages %}
+
+		{% for page in pages %}
 			<li id="p{{ page.parent }}" style="padding: 2px 0px 2px 0px;">
 				<table width="720" cellpadding="1" cellspacing="0" border="0" style="background-color: #F0F0F0;">
 					<tr>
@@ -62,12 +62,13 @@
 				</table>
 			</li>
 			{% if page.subpage != 0 %}
-				{# recursive call of this macro for the subpages #}
+
 				{% import _self as page_ref %}
 				{{ page_ref.display_page( page.subpage, TEXT, MOD_PAGECLONER, THEME_URL, LEPTON_URL ) }}
-				{% endif %}
-			{# schleife mit den Unterseiten ende #}
-			{% endfor %}
+
+			{% endif %}
+
+		{% endfor %}
 		</ul>
 {% endmacro %}
 	

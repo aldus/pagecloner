@@ -42,79 +42,74 @@ require_once ( !file_exists($lang) ? (dirname(__FILE__))."/languages/EN.php" : $
 global $parser, $loader;
 require( dirname(__FILE__)."/register_parser.php" );
 
-function make_list($parent, &$editable_pages) {
-	global $database, $TEXT;
+$all_pages = array();
+$database->execute_query(
+	"SELECT `page_id`, `page_title`, `menu_title`, `parent`, `position`, `visibility`, `level` FROM `".TABLE_PREFIX."pages` ORDER BY `parent`,`position`",
+	true,
+	$all_pages
+);
 
-	$all_pages = array();
-	$database->execute_query(
-		"SELECT * FROM ".TABLE_PREFIX."pages WHERE parent = '".$parent."' AND visibility != 'deleted' ORDER BY position ASC",
-		true,
-		$all_pages
-	);
-
-	$num_pages = count($all_pages);
-
-	foreach($all_pages as $page) {
+function make_list( $aNum, &$aRefArray ) {
+	global $all_pages, $TEXT;
+	
+	foreach($all_pages as &$ref) {
 		
-		$page['current_parent'] = $parent;
+		if ($ref['parent'] > $aNum) break;
 		
-		switch( $page['visibility'] ) {
-			case 'public':
-				$page['status_icon'] = "visible_16.png";
-				$page['status_text'] = $TEXT['PUBLIC'];
-				break;
+		if ($ref['parent'] == $aNum) {
 			
-			case 'private':
-				$page['status_icon'] = "private_16.png";
-				$page['status_text'] = $TEXT['PRIVATE'];
-				break;
+			$ref['current_parent'] = $aNum;
 			
-			case 'registered':
-				$page['status_icon'] = "keys_16.png";
-				$page['status_text'] = $TEXT['REGISTERED'];
-				break;
+			switch( $ref['visibility'] ) {
+				case 'public':
+					$ref['status_icon'] = "visible_16.png";
+					$ref['status_text'] = $TEXT['PUBLIC'];
+					break;
+			
+				case 'private':
+					$ref['status_icon'] = "private_16.png";
+					$ref['status_text'] = $TEXT['PRIVATE'];
+					break;
+			
+				case 'registered':
+					$ref['status_icon'] = "keys_16.png";
+					$ref['status_text'] = $TEXT['REGISTERED'];
+					break;
 				
-			case 'hidden':
-				$page['status_icon'] = "hidden_16.png";
-				$page['status_text'] = $TEXT['HIDDEN'];
-				break;
+				case 'hidden':
+					$ref['status_icon'] = "hidden_16.png";
+					$ref['status_text'] = $TEXT['HIDDEN'];
+					break;
 				
-			case 'none':
-				$page['status_icon'] = "none_16.png";
-				$page['status_text'] = $TEXT['NONE'];
-				break;
+				case 'none':
+					$ref['status_icon'] = "none_16.png";
+					$ref['status_text'] = $TEXT['NONE'];
+					break;
 				
-			case 'deleted':
-				$page['status_icon'] = "deleted_16.png";
-				$page['status_text'] = $TEXT['DELETED'];
-				break;
+				case 'deleted':
+					$ref['status_icon'] = "deleted_16.png";
+					$ref['status_text'] = $TEXT['DELETED'];
+					break;
 
+			}
+			
+			$temp = array();
+			make_list( $ref['page_id'], $temp);
+			
+			$n = count($temp);
+			$ref['display_plus'] = ($n > 0) ? 1 : 0;
+			$ref['subpage'] = ($n > 0) ? $temp : 0;
+			
+			$aRefArray[] = &$ref;
 		}
-		
-		$get_page_subs = $database->query("SELECT `page_id` FROM `".TABLE_PREFIX."pages` WHERE `parent`= '".$page['page_id']."'");
-		$num_subpages = $get_page_subs->numRows();
-			
-		if($num_subpages == 0) {
-			$page['display_plus'] = 0;
-			$page['subpage'] = 0;
-		} else {
-			$page['display_plus'] = 1;
-			$sub_page = array();
-			make_list( $page['page_id'], $sub_page );
-			$page['subpage'] = $sub_page;
-		}
-		
-		$editable_pages[] = $page;
 	}
-
-}
+}		
 
 // Generate pages list
 if($admin->get_permission('pages_view') == true) {
 
 	$editable_pages = array();
 	make_list(0, $editable_pages);
-	
 	
 	$pagecloner_vars = array(
 		'THEME_URL'	=> THEME_URL,
