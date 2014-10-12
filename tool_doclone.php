@@ -373,17 +373,22 @@ echo 'cloning---'.$pagetoclone.' to '.$parent;
 	return $page_id;
 }
 
-function clone_subs($pagetoclone,$parent) {
-	global $admin, $database;
-	// Get page list from database
-
-	$query = "SELECT * FROM ".TABLE_PREFIX."pages WHERE parent = '$pagetoclone'";
-	$get_subpages = $database->query($query);
+function clone_subs($pagetoclone, $parent) {
+	global $database;
 	
-	if($get_subpages->numRows() > 0)	{
-		while($page = $get_subpages->fetchRow( MYSQL_ASSOC )) {
+	$subpages = array();
+	$database->execute_query(
+		"SELECT `page_title`,`page_id` FROM `".TABLE_PREFIX."pages` WHERE `parent` = '".$pagetoclone."' order by `position`",
+		true,
+		$subpages
+	);
+		
+	if(count($subpages) > 0)	{
+		foreach($subpages as &$page) {
+
 			echo '<p>clonepage('.$page['page_title'].','.$parent.','.$page['page_id'].')</p>>';
 			$newnew_page = clone_page($page['page_title'],$parent,$page['page_id']);
+			
 			echo '<p>clonesubs('.$page['page_id'].','.$newnew_page.')</p><hr />';
 			clone_subs($page['page_id'],$newnew_page);
 		}
