@@ -12,11 +12,14 @@ John Maats, Christian Sommer, Dietrich Roland Pehlke, Stephan Kuehn, vBoedefeld,
 
 ### Changelog
 
-- v 1.0.0 cms-lab
-	+ recode for LEPTON 2
-	+ upload to Git  
+- 1.0.0 cms-lab
+  + upload to Git
+  + prepare for LEPTON 2.x  
+  
+- 0.5.6 cms-lab
+  + recode for LEPTON 1.3.2   
 
-- v 0.5.4 (Stephan Kühn; 10. August 2010)
+- v 0.5.4 (Stephan K&uuml;hn; 10. August 2010)
 	+ mpform support
 	+ migrating the pagetree idea by pcwacht support 
         
