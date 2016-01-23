@@ -5,7 +5,7 @@
  *  @version        see info.php of this module
  *  @authors        John Maats - Dietrich Roland Pehlke - Stephan Kuehn - vBoedefeld, cms-lab
  *  @copyright      2006-2010 John Maats - Dietrich Roland Pehlke - Stephan Kuehn - vBoedefeld
- *  @copyright      2010-2014 cms-lab 
+ *  @copyright      2010-2016 cms-lab 
  *  @license        GNU General Public License
  *  @license terms  see info.php of this module
  *
@@ -31,7 +31,7 @@ if (defined('LEPTON_PATH')) {
 // end include class.secure.php
 
 require_once(LEPTON_PATH.'/framework/class.admin.php');
-require_once(LEPTON_PATH.'/framework/functions.php');
+require_once(LEPTON_PATH.'/framework/summary.functions.php');
 
 // make sure that a page to clone was specified
 $pagetodo = isset($_GET['pagetoclone']) ? (int) $_GET['pagetoclone'] : 0;

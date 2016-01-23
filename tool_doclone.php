@@ -5,7 +5,7 @@
  *  @version        see info.php of this module
  *  @authors        John Maats - Dietrich Roland Pehlke - Stephan Kuehn - vBoedefeld, cms-lab
  *  @copyright      2006-2010 John Maats - Dietrich Roland Pehlke - Stephan Kuehn - vBoedefeld
- *  @copyright      2010-2014 cms-lab 
+ *  @copyright      2010-2016 cms-lab 
  *  @license        GNU General Public License
  *  @license terms  see info.php of this module
  *
@@ -34,7 +34,7 @@ if (defined('LEPTON_PATH')) {
 // Where the actual cloning will take place
 
 require_once(LEPTON_PATH.'/framework/class.admin.php');
-require_once(LEPTON_PATH.'/framework/functions.php');
+require_once(LEPTON_PATH.'/framework/summary.functions.php');
 require_once(LEPTON_PATH.'/framework/class.order.php');
 
 // create admin object depending on platform (admin tools were moved out of settings with WB 2.7)
@@ -47,7 +47,7 @@ if(file_exists(ADMIN_PATH .'/admintools/tool.php')) {
 }
 
 // First get the selected page
-$title = isset($_REQUEST["title"]) ?$admin->add_slashes($_REQUEST["title"]) : '';
+$title = isset($_REQUEST["title"]) ?addslashes($_REQUEST['title']): '';
 $parent = isset($_REQUEST["parent"]) ?$_REQUEST["parent"] : '';
 $pagetoclone = isset($_REQUEST["pagetoclone"]) ? (int)$_REQUEST["pagetoclone"] : 0;
 $include_subs = isset($_REQUEST["include_subs"]) ? '1' : '0';

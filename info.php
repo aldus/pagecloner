@@ -5,7 +5,7 @@
  *  @version        see info.php of this module
  *  @authors        John Maats - Dietrich Roland Pehlke - Stephan Kuehn - vBoedefeld, cms-lab
  *  @copyright      2006-2010 John Maats - Dietrich Roland Pehlke - Stephan Kuehn - vBoedefeld
- *  @copyright      2010-2014 cms-lab 
+ *  @copyright      2010-2016 cms-lab 
  *  @license        GNU General Public License
  *  @license terms  see info.php of this module
  *
@@ -33,7 +33,7 @@ if (defined('LEPTON_PATH')) {
 $module_directory 		= 'pagecloner';
 $module_name 			= 'Page Cloner';
 $module_function 		= 'tool';
-$module_version 		= '1.0.0';
+$module_version 		= '1.1.0';
 $module_platform 		= '2.x';
 $module_author 			= 'John Maats - Dietrich Roland Pehlke - Stephan Kuehn - vBoedefeld, cms-lab';
 $module_license 		= 'GNU General Public License';
