@@ -50,7 +50,7 @@ $database->execute_query(
 );
 
 function make_list( $aNum, &$aRefArray ) {
-	global $all_pages, $TEXT;
+	global $all_pages, $MOD_PAGECLONER, $TEXT;
 	
 	foreach($all_pages as &$ref) {
 		

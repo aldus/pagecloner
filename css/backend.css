@@ -16,7 +16,7 @@ table {
 	overflow: hidden;
 }
 
-.pages_list img {
+.pageslist img {
 	display: block;
 }
 
@@ -26,6 +26,6 @@ ul, li {
 	padding: 0;
 }
 
-.page_list {
+.pagelist {
 	display: block;
 }

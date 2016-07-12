@@ -39,7 +39,7 @@ $pagetodo = isset($_GET['pagetoclone']) ? (int) $_GET['pagetoclone'] : 0;
 // check if specified page exists in the database
 $query = "SELECT * FROM ".TABLE_PREFIX."pages WHERE page_id = '$pagetodo'";
 $get_pagetodo = $database->query($query);   
-$is_pagetodo = $get_pagetodo->fetchRow( MYSQL_ASSOC );
+$is_pagetodo = $get_pagetodo->fetchRow();
 
 $admintool_link = ADMIN_URL .'/admintools/index.php';
 $pageclone_link = ADMIN_URL .'/admintools/tool.php?tool=pagecloner';
@@ -171,9 +171,6 @@ if ($pagetodo > 0 && $is_pagetodo) {
 		$template->set_var('DISPLAY_ADD', 'hide');
 	} elseif($admin->get_permission('pages_add_l0') != true AND $editable_pages == 0) {
 		$template->set_var('DISPLAY_ADD', 'hide');
-	}
-	if($admin->get_permission('pages_intro') != true OR INTRO_PAGE != 'enabled') {
-		$template->set_var('DISPLAY_INTRO', 'hide');
 	}
 
 	// Parse template object
