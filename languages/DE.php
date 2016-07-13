@@ -14,7 +14,7 @@
 // German language file for the admin module 'pagecloner'
 
 $MOD_PAGECLONER['INTRO_TEXT']		= 'Mit diesem Addon kannst du Seiten kopieren.<br />Nachfolgend eine Liste aller vorhandenen Seiten:';
-$MOD_PAGECLONER['CHOOSE_PAGE']		= 'Wähle eine zu kopierende Seite';
+$MOD_PAGECLONER['CHOOSE_PAGE']		= 'WÃ¤hle eine zu kopierende Seite';
 $MOD_PAGECLONER['CLONE_PAGE']		= 'Klick um die derzeitige Seite zu kopieren!';
 $MOD_PAGECLONER['CLONE_PAGETO']		= 'Kopiere aktuelle Seite zu: ';
 $MOD_PAGECLONER['CLONE_FROM']		= 'Kopieren : ';
@@ -24,6 +24,6 @@ $MOD_PAGECLONER['ADD']				= 'Kopieren';
 $MOD_PAGECLONER['CONTINUE']			= 'Fortfahren';
 $MOD_PAGECLONER['ABORT']			= 'Abbrechen';
 $MOD_PAGECLONER['CREATED']			= 'Erfolgreich kopiert';
-$MOD_PAGECLONER['INCLUDE_SUBS']     = 'einschließlich Unterseiten';
+$MOD_PAGECLONER['INCLUDE_SUBS']     = 'einschlieï¬‚lich Unterseiten';
 
 ?>
