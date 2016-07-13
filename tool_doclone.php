@@ -410,7 +410,9 @@ if ($include_subs == '1') {
 if($database->is_error()) {
 	$admin->print_error($database->get_error(),'tool_clone.php?pagetoclone='.$pagetoclone);
 } else {
-	$admin->print_success($MESSAGE['PAGES']['ADDED'], ADMIN_URL.'/pages/modify.php?page_id='.$page_id);
+//	$admin->print_success($MESSAGE['PAGES']['ADDED'], ADMIN_URL.'/pages/modify.php?page_id='.$page_id);
+	$admin->print_success($MESSAGE['PAGES']['ADDED'], ADMIN_URL.'/admintools/tool.php?tool=pagecloner');
+	
 }
 $admin->print_footer();
 ?>

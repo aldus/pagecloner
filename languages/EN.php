@@ -22,7 +22,7 @@ $MOD_PAGECLONER['CLONE_TO']			= 'To the new page : ';
 $MOD_PAGECLONER['INCLUDE_SUBS']		= 'Include subpages? ';
 $MOD_PAGECLONER['ADD']				= 'Duplicate';
 $MOD_PAGECLONER['CONTINUE']			= 'Continue';
-$MOD_PAGECLONER['ABORT']			= 'Abort';
+$MOD_PAGECLONER['ABORT']			= 'Cancel';
 $MOD_PAGECLONER['CREATED']			= 'Successfully duplicated';
 $MOD_PAGECLONER['INCLUDE_SUBS']     = 'include subpages';
 

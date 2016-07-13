@@ -138,7 +138,6 @@ if ($pagetodo > 0 && $is_pagetodo) {
 	// Insert language headings
 	$template->set_var(array(
 		'HEADING_ADD_PAGE' => $MOD_PAGECLONER['CLONE_PAGETO'],
-		'HEADING_MODIFY_INTRO_PAGE' => $HEADING['MODIFY_INTRO_PAGE']
 		)
 	);
 
@@ -159,10 +158,12 @@ if ($pagetodo > 0 && $is_pagetodo) {
 		'TEXT_PAGETODO' => $pagetodo,
 		'TEXT_ADD' => $MOD_PAGECLONER['ADD'],
 		'TEXT_RESET' => $TEXT['RESET'],
+		'TEXT_ABORT' => $MOD_PAGECLONER['ABORT'],		
 		'TEXT_ADMINISTRATORS' => $TEXT['ADMINISTRATORS'],								
 		'TEXT_PRIVATE_VIEWERS' => $TEXT['PRIVATE_VIEWERS'],
 		'TEXT_REGISTERED_VIEWERS' => $TEXT['REGISTERED_VIEWERS'],
-		'INTRO_LINK' => $MESSAGE['PAGES']['INTRO_LINK'],
+
+		'CANCEL_ONCLICK'	=> 'javascript: window.location = \''.ADMIN_URL.'/admintools/tool.php?tool=pagecloner\';'		
 		)
 	);
 

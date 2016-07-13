@@ -33,7 +33,7 @@ if (defined('LEPTON_PATH')) {
 $module_directory 		= 'pagecloner';
 $module_name 			= 'Page Cloner';
 $module_function 		= 'tool';
-$module_version 		= '1.1.1';
+$module_version 		= '1.2.0';
 $module_platform 		= '2.x';
 $module_author 			= 'John Maats - Dietrich Roland Pehlke - Stephan Kuehn - vBoedefeld, cms-lab';
 $module_license 		= 'GNU General Public License';

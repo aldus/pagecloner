@@ -37,6 +37,7 @@
 		<input type="hidden" name="pagetoclone" value="{TEXT_PAGETODO}"  />
 		<input type="submit" name="submit" value="{TEXT_ADD}" style="width: 117px;" />
 		<input type="reset" name="reset" value="{TEXT_RESET}" style="width: 117px;" />
+		<input type="reset" name="cancel" value="{TEXT_ABORT}" onclick="{CANCEL_ONCLICK}" style="width: 117px;" />		
 	</td>
 </tr>
 <tr>
@@ -48,16 +49,4 @@
 </form>
 
 </div>
-<div class="{DISPLAY_INTRO}" style="padding-top: 10px;">
-
-<br />
-
-<h2>{HEADING_MODIFY_INTRO_PAGE}</h2>
-
-<a href="intro.php">
-{INTRO_LINK}
-</a>
-
-</div>
-
 <!-- END main_block -->
