@@ -24,6 +24,6 @@ $MOD_PAGECLONER['ADD']				= 'Kopieren';
 $MOD_PAGECLONER['CONTINUE']			= 'Fortfahren';
 $MOD_PAGECLONER['ABORT']			= 'Abbrechen';
 $MOD_PAGECLONER['CREATED']			= 'Erfolgreich kopiert';
-$MOD_PAGECLONER['INCLUDE_SUBS']     = 'einschlieﬂlich Unterseiten';
+$MOD_PAGECLONER['INCLUDE_SUBS']     = 'einschließlich Unterseiten';
 
 ?>

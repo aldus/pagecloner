@@ -9,15 +9,19 @@
 
 <form name="add" action="tool_doclone.php" method="post">
 <table cellpadding="2" cellspacing="0" border="0" width="100%" align="center">
-<tr>
-	<td width="140" height="20">{TEXT_TITLE}:</td>
-	<td with="240" height="20">
+<tr height="20">
+	<td>&nbsp;</td>
+	<td>&nbsp;</td>
+</tr>
+<tr height="20">
+	<td width="70">{TEXT_TITLE}:</td>
+	<td width="240">
 		<input type="text" name="title" value="{TEXT_DEFAULT}" style="width: 232px;" />
 	</td>
 </tr>
 <tr height="20">
-	<td width="140">{TEXT_PARENT}:</td>
-	<td with="240">
+	<td>{TEXT_PARENT}:</td>
+	<td width="240">
 		<select name="parent" style="width: 240px;">
 			<!-- BEGIN page_list_block2 -->
 			<option value="{ID}"{DISABLED}>{TITLE}</option>
@@ -26,13 +30,17 @@
 	</td>
 </tr>
 <tr height="20">
-	<td width="140">{TEXT_INCLUDE_SUBS}:</td>
-	<td with="240">
+	<td>{TEXT_INCLUDE_SUBS}:</td>
+	<td width="240">
 		<input type="checkbox" name="include_subs" value="include_subs" />
 	</td>
 </tr>
+<tr height="20">
+	<td>&nbsp;</td>
+	<td>&nbsp;</td>
+</tr>
 <tr>
-	<td width="70">&nbsp;</td>
+
 	<td colspan="4">
 		<input type="hidden" name="pagetoclone" value="{TEXT_PAGETODO}"  />
 		<input type="submit" name="submit" value="{TEXT_ADD}" style="width: 117px;" />

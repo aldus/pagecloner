@@ -144,7 +144,7 @@ if ($pagetodo > 0 && $is_pagetodo) {
 	// Insert language text and messages
 	$template->set_var(array(
 		'TEXT_TITLE' => $TEXT['TITLE'],
-		'TEXT_DEFAULT' => $is_pagetodo['menu_title'],
+		'TEXT_DEFAULT' => $is_pagetodo['menu_title'].' - Copy',
 		'TEXT_TYPE' => $TEXT['TYPE'],
 		'TEXT_PARENT' => $TEXT['PARENT'],
 		'TEXT_INCLUDE_SUBS' => $MOD_PAGECLONER['INCLUDE_SUBS'],
