@@ -104,12 +104,47 @@ echo 'cloning---'.$pagetoclone.' to '.$parent;
 	$visibility = $is_page['visibility'];
 	$admin_groups = $is_page['admin_groups'];
 	$viewing_groups = $is_page['viewing_groups'];
+	
+	/**
+	 *	Aldus - 2016-09-20
+	 */
+	$fields = array(
+		"page_title"	=> $title,
+		"menu_title"	=> $title,
+		"parent"		=> $parent,
+		"template"		=> $template,
+		"target"		=> '_top',		// *
+		"position"		=> $position,
+		"visibility"	=> $visibility,
+		"searching"		=> 1,			// *
+		"menu"			=> 1,			// *
+		"language"		=> DEFAULT_LANGUAGE,
+		"admin_groups"	=> $admin_groups,
+		"admin_users"	=> $is_page['admin_users'],
+		"viewing_groups"	=> $viewing_groups,
+		"modified_when"		=> time(),
+		"modified_by"		=> $admin->get_user_id(),
+		"link"			=> $link,	//	**
+		"description"	=> $is_page['description'],
+		"keywords"		=> $is_page['keywords'],
+		"page_trail"	=> $is_page['page_trail'],
+		"viewing_users"	=> $is_page['viewing_users']
+	);
+		
+	/*
 	$query = "INSERT INTO ".TABLE_PREFIX."pages (page_title,menu_title,parent,template,target,position,visibility,searching,menu,language,admin_groups,viewing_groups,modified_when,modified_by) VALUES ('$title','$title','$parent','$template','_top','$position','$visibility','1','1','".DEFAULT_LANGUAGE."','$admin_groups','$viewing_groups','".TIME()."','".$admin->get_user_id()."')";
 
 	$database->query($query);
 	if($database->is_error()) {
 		$admin->print_error($database->get_error());
 	}
+	*/
+	
+	$database->build_and_execute(
+		'insert',
+		TABLE_PREFIX."pages",
+		$fields
+	);
 	
 	// Get the page id
 	global $page_id;
@@ -311,12 +346,15 @@ echo 'cloning---'.$pagetoclone.' to '.$parent;
 						$upload_dir_mask = addslashes($is_formsettings['upload_dir_mask']);
 						$upload_only_exts = addslashes($is_formsettings['upload_only_exts']);
 						$is_following = $is_formsettings['is_following'];
-						$tbl_suffix = addslashes($is_formsettings['tbl_suffix']);
+						$tbl_suffix = $section_id; // addslashes($is_formsettings['tbl_suffix']);
 						$enum_start = addslashes($is_formsettings['enum_start']);
-				  $database->query("UPDATE ".TABLE_PREFIX."mod_mpform_settings SET header = '$header', field_loop = '$field_loop', footer = '$footer', email_to = '$email_to', email_from = '$email_from', email_fromname = '$email_fromname', email_subject = '$email_subject', email_text = '$email_text', success_page = '$success_page', success_text = '$success_text', submissions_text = '$submissions_text', success_email_to = '$success_email_to', success_email_from = '$success_email_from', success_email_fromname = '$success_email_fromname', success_email_text = '$success_email_text', success_email_subject = '$success_email_subject', stored_submissions = '$stored_submissions', max_submissions = '$max_submissions', heading_html = '$heading_html', short_html = '$short_html', long_html = '$long_html', email_html = '$email_html', uploadfile_html = '$uploadfile_html', use_captcha = '$use_captcha', upload_files_folder = '$upload_files_folder', date_format = '$date_format', max_file_size_kb = '$max_file_size_kb', attach_file = '$attach_file', upload_file_mask = '$upload_file_mask', upload_dir_mask = '$upload_dir_mask', upload_only_exts = '$upload_only_exts', is_following = '$is_following', tbl_suffix = '$tbl_suffix', enum_start = '$enum_start' WHERE section_id = '$section_id'");
-				}	
+						
+						$database->query("UPDATE ".TABLE_PREFIX."mod_mpform_settings SET header = '$header', field_loop = '$field_loop', footer = '$footer', email_to = '$email_to', email_from = '$email_from', email_fromname = '$email_fromname', email_subject = '$email_subject', email_text = '$email_text', success_page = '$success_page', success_text = '$success_text', submissions_text = '$submissions_text', success_email_to = '$success_email_to', success_email_from = '$success_email_from', success_email_fromname = '$success_email_fromname', success_email_text = '$success_email_text', success_email_subject = '$success_email_subject', stored_submissions = '$stored_submissions', max_submissions = '$max_submissions', heading_html = '$heading_html', short_html = '$short_html', long_html = '$long_html', email_html = '$email_html', uploadfile_html = '$uploadfile_html', use_captcha = '$use_captcha', upload_files_folder = '$upload_files_folder', date_format = '$date_format', max_file_size_kb = '$max_file_size_kb', attach_file = '$attach_file', upload_file_mask = '$upload_file_mask', upload_dir_mask = '$upload_dir_mask', upload_only_exts = '$upload_only_exts', is_following = '$is_following', tbl_suffix = '$tbl_suffix', enum_start = '$enum_start' WHERE section_id = '$section_id'");
+				}
+				
 				$query = "SELECT * FROM ".TABLE_PREFIX."mod_mpform_fields WHERE section_id = '$from_section'";
-				$get_formfield = $database->query($query);	 
+				$get_formfield = $database->query($query);
+				$results_table_field_ids = array(); 
 				while ($is_formfield=$get_formfield->fetchRow()) {
 						// Insert formfields with cloned data
 						$position = $is_formfield['position'];
@@ -327,7 +365,27 @@ echo 'cloning---'.$pagetoclone.' to '.$parent;
 						$extra = addslashes($is_formfield['extra']);
 						$help = addslashes($is_formfield['help']);
 						$database->query("INSERT INTO ".TABLE_PREFIX."mod_mpform_fields (section_id, page_id, position, title, type, required, value, extra, help) VALUES ('$section_id','$page_id','$position','$title','$type','$required','$value','$extra', '$help')");
+						
+						$results_table_field_ids[] = $database->db_handle->lastInsertId();
 				}
+				
+				//	Create the "results"-table
+				$results_table = TABLE_PREFIX . "mod_mpform_results_" . $section_id;
+				
+				$query_str = "CREATE TABLE `".$results_table."` ( ";
+				$query_str .= "`session_id` VARCHAR(20) NOT NULL,";
+				$query_str .= "`started_when` INT NOT NULL DEFAULT '0' ,";	// time when first form was sent to browser
+				$query_str .= "`submitted_when` INT NOT NULL DEFAULT '0' ,";	// time when last form was sent back to server
+				$query_str .= "`referer` VARCHAR( 255 ) NOT NULL  ";			// referer page
+
+				foreach( $results_table_field_ids as $temp_id ) {
+					$query_str .= ", `field" . $temp_id . "` TEXT NOT NULL";
+				}
+
+				$query_str .= ", PRIMARY KEY ( `session_id` ) )";
+
+				$database->execute_query( $query_str );
+				
 				break;
         	
         	case 'code':
