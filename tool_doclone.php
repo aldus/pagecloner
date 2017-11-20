@@ -5,7 +5,7 @@
  *  @version        see info.php of this module
  *  @authors        John Maats - Dietrich Roland Pehlke - Stephan Kuehn - vBoedefeld, cms-lab
  *  @copyright      2006-2010 John Maats - Dietrich Roland Pehlke - Stephan Kuehn - vBoedefeld
- *  @copyright      2010-2016 cms-lab 
+ *  @copyright      2010-2017 cms-lab 
  *  @license        GNU General Public License
  *  @license terms  see info.php of this module
  *
@@ -33,17 +33,17 @@ if (defined('LEPTON_PATH')) {
 // tool_doclone.php
 // Where the actual cloning will take place
 
-require_once(LEPTON_PATH.'/framework/class.admin.php');
+// require_once(LEPTON_PATH.'/framework/class.admin.php');
 require_once(LEPTON_PATH.'/framework/summary.functions.php');
-require_once(LEPTON_PATH.'/framework/class.order.php');
+// require_once(LEPTON_PATH.'/framework/class.order.php');
 
 // create admin object depending on platform (admin tools were moved out of settings with WB 2.7)
 if(file_exists(ADMIN_PATH .'/admintools/tool.php')) {
 	// since Website Baker 2.7
-	$admin = new admin('admintools', 'admintools');
+	$admin = new LEPTON_admin('admintools', 'admintools');
 } else {
 	// Website Baker prior to 2.7
-	$admin = new admin('Settings', 'settings_advanced');
+	$admin = new LEPTON_admin('Settings', 'settings_advanced');
 }
 
 // First get the selected page
@@ -72,8 +72,8 @@ echo 'cloning---'.$pagetoclone.' to '.$parent;
 	
 	// Work-out what the link and page filename should be
 	if($parent == '0') {
-		$link = '/'.page_filename($title);
-		$filename = LEPTON_PATH.PAGES_DIRECTORY.'/'.page_filename($title).'.php';
+		$link = '/'.save_filename($title);
+		$filename = LEPTON_PATH.PAGES_DIRECTORY.'/'.save_filename($title).'.php';
 	} else {
 		$parent_section = '';
 		$parent_titles = array_reverse(get_parent_titles($parent));
@@ -93,7 +93,7 @@ echo 'cloning---'.$pagetoclone.' to '.$parent;
 	}
 	
 	// Include the ordering class
-	$order = new order(TABLE_PREFIX.'pages', 'position', 'page_id', 'parent');
+	$order = new LEPTON_order(TABLE_PREFIX.'pages', 'position', 'page_id', 'parent');
 	// First clean order
 	$order->clean($parent);
 	// Get new order
