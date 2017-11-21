@@ -1,0 +1,52 @@
+{% autoescape false %}
+
+{#
+    we start here with a macro for the page-select
+#}
+
+{% macro build_page_option( all_pages_ref, source_page_id, recursion_deep) %}
+    {% for page in all_pages_ref %}
+        <option value="{{ page.page_id }}" {% if(page.page_id == source_page_id) %}disabled="disabled"{% endif %}>{% for i in 1..recursion_deep if recursion_deep > 0 %}- {% endfor %}{{ page.page_title }}</option>
+        {% if page.subpages != 0 %}
+            {% import _self as build_ref %}
+            {{ build_ref.build_page_option( page.subpages, currend_page_id, recursion_deep+1 ) }}
+        {% endif %}
+    {% endfor %}
+{% endmacro %}
+
+<div class="ui header">
+    {{ MOD_PAGECLONER.CLONE_FROM }} "{{ source_page.page_title }}" [id: {{ source_page.page_id }}]
+</div>
+    
+<form class="ui form pagecloner" action="tool_doclone.php" method="post">
+    <input type="hidden" name="pagetoclone" value="{{ source_page.page_id }}"  />
+    <input type="hidden" name="leptoken" value="{{ leptoken }}" />
+    
+    <div class="field">
+        <label>{{ MOD_PAGECLONER.CLONE_TO }}</label>
+        <input type="text" name="title" value="{{ new_page_name }}" />
+    </div>    
+
+    <div class="field">
+        <label>{{ TEXT.PARENT }}:</label>
+        <select name="parent">
+            <option value="0" >None</option>
+            
+            {% import _self as build_ref %}
+            {{ build_ref.build_page_option( all_pages, source_page.page_id, 0) }}
+        
+        </select>
+    </div>
+
+    <div class="ui input labeled">
+        <label for="pagecloner_subs">{{ MOD_PAGECLONER.INCLUDE_SUBS }}: </label>
+        <input type="checkbox" id="pagecloner_subs" name="include_subs" value="1" />
+    </div>
+
+    <div class="ui element">
+        <input class="positive ui button lepsem_submit" type="submit" name="submit" value="{{ MOD_PAGECLONER.ADD }}" />
+        <input class="red ui button lepsem_cancel" type="button" name="cancel" value="{{ MOD_PAGECLONER.ABORT }}" onclick="document.location.href='{{ ADMIN_URL }}/admintools/tool.php?tool=pagecloner';" />		
+    </div>
+</form>
+    
+{% endautoescape %}

@@ -1,5 +1,5 @@
 #PageCloner
-for LEPTON-CMS 2
+for LEPTON-CMS 3
 
 ## Description
 This addon allows you to clone a page or a complete tree with all page and sections.
@@ -7,11 +7,17 @@ Copying of complete datasets from pagesections to their clones is limited to fol
 modules: wywsiwyg, form, mpform, code, code2. 
 Only the sections (with their default) settings are cloned for not supported modules.
 
+### Require
+- LEPTOM-CMS >= 3.1
+- PHP >= 7.0.6 (7.1 recommend)
+
 ### Authors
 John Maats, Christian Sommer, Dietrich Roland Pehlke, Stephan Kuehn, vBoedefeld, cms-lab
 
 ### Changelog
-
+- 2.0.0 cms-lab
+  + Codechanges and additions for L* 3.1
+  
 - 1.2.1	cms-lab
   + Bugfix for "mpform"
   + Bugfixes for MySQL StrictMode

@@ -36,94 +36,26 @@ if (defined('LEPTON_PATH')) {
 $lang = (dirname(__FILE__))."/languages/". LANGUAGE .".php";
 require_once ( !file_exists($lang) ? (dirname(__FILE__))."/languages/EN.php" : $lang );
 
-/**	*******************************
- *	Try to get the template-engine.
- */
-global $parser, $loader;
-require( dirname(__FILE__)."/register_parser.php" );
-
+LEPTON_tools::register("page_tree");
 $all_pages = array();
-$database->execute_query(
-	"SELECT `page_id`, `page_title`, `menu_title`, `parent`, `position`, `visibility`, `level` FROM `".TABLE_PREFIX."pages` ORDER BY `parent`,`position`",
-	true,
-	$all_pages
-);
-
-function make_list( $aNum, &$aRefArray ) {
-	global $all_pages, $MOD_PAGECLONER, $TEXT;
-	
-	foreach($all_pages as &$ref) {
-		
-		if ($ref['parent'] > $aNum) break;
-		
-		if ($ref['parent'] == $aNum) {
-			
-			$ref['current_parent'] = $aNum;
-			
-			switch( $ref['visibility'] ) {
-				case 'public':
-					$ref['status_icon'] = "visible_16.png";
-					$ref['status_text'] = $TEXT['PUBLIC'];
-					break;
-			
-				case 'private':
-					$ref['status_icon'] = "private_16.png";
-					$ref['status_text'] = $TEXT['PRIVATE'];
-					break;
-			
-				case 'registered':
-					$ref['status_icon'] = "keys_16.png";
-					$ref['status_text'] = $TEXT['REGISTERED'];
-					break;
-				
-				case 'hidden':
-					$ref['status_icon'] = "hidden_16.png";
-					$ref['status_text'] = $TEXT['HIDDEN'];
-					break;
-				
-				case 'none':
-					$ref['status_icon'] = "none_16.png";
-					$ref['status_text'] = $TEXT['NONE'];
-					break;
-				
-				case 'deleted':
-					$ref['status_icon'] = "deleted_16.png";
-					$ref['status_text'] = $TEXT['DELETED'];
-					break;
-
-			}
-			
-			$temp = array();
-			make_list( $ref['page_id'], $temp);
-			
-			$n = count($temp);
-			$ref['display_plus'] = ($n > 0) ? 1 : 0;
-			$ref['subpage'] = ($n > 0) ? $temp : 0;
-			
-			$aRefArray[] = &$ref;
-		}
-	}
-}		
+page_tree(0, $all_pages);
 
 // Generate pages list
 if($admin->get_permission('pages_view') == true) {
-
-	$editable_pages = array();
-	make_list(0, $editable_pages);
 	
 	$pagecloner_vars = array(
 		'THEME_URL'	=> THEME_URL,
 		'LEPTON_URL' => LEPTON_URL,
 		'TEXT' => $TEXT,
 		'MOD_PAGECLONER' => $MOD_PAGECLONER,
-		'editable_pages' => $editable_pages
+		'editable_pages' => $all_pages
 	);
 
-	$twig_util->resolve_path("modify.lte");
+    $oTwig = lib_twig_box::getInstance();
+	$oTwig->registerModule("pagecloner");
 	
-	echo $parser->render( 
-		$twig_modul_namespace."modify.lte",
+	echo $oTwig->render( 
+		"@pagecloner/modify.lte",
 		$pagecloner_vars
 	);
 }
-?>

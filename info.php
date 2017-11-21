@@ -33,7 +33,7 @@ if (defined('LEPTON_PATH')) {
 $module_directory 		= 'pagecloner';
 $module_name 			= 'Page Cloner';
 $module_function 		= 'tool';
-$module_version 		= '1.3.0';
+$module_version 		= '2.0.0';
 $module_platform 		= '2.x';
 $module_author 			= 'John Maats - Dietrich Roland Pehlke - Stephan Kuehn - vBoedefeld, cms-lab';
 $module_license 		= 'GNU General Public License';
@@ -41,6 +41,3 @@ $module_license_terms	= '-';
 $module_description 	= 'This addon allows you to clone a page or a complete tree with all page and sections. Copying of complete datasets from pagesections to their clones is limited to following modules: wywsiwyg, form, mpform, code, code2. Only the sections (with their default) settings are cloned for not supported modules.';
 $module_guid 			= '25bfa866-2ee3-4731-8f44-f49f01c8294a';
 $module_home 			= 'http://cms-lab.com';
-
-
-?>

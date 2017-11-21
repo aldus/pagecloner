@@ -29,3 +29,7 @@ ul, li {
 .pagelist {
 	display: block;
 }
+
+form.pagecloner {
+    padding-top:54px !important;
+}
