@@ -5,7 +5,7 @@
  *  @version        see info.php of this module
  *  @authors        John Maats - Dietrich Roland Pehlke - Stephan Kuehn - vBoedefeld, cms-lab
  *  @copyright      2006-2010 John Maats - Dietrich Roland Pehlke - Stephan Kuehn - vBoedefeld
- *  @copyright      2010-2016 cms-lab 
+ *  @copyright      2010-2017 cms-lab 
  *  @license        GNU General Public License
  *  @license terms  see info.php of this module
  *
@@ -30,7 +30,7 @@ if (defined('LEPTON_PATH')) {
 }
 // end include class.secure.php
 
-require_once(LEPTON_PATH.'/framework/class.admin.php');
+// require_once(LEPTON_PATH.'/framework/class.admin.php');
 require_once(LEPTON_PATH.'/framework/summary.functions.php');
 
 // make sure that a page to clone was specified
@@ -49,7 +49,7 @@ if ($pagetodo < 1 || !$is_pagetodo) {
 	die(header('Location: '.$pageclone_link));
 } 
 
-$admin = new admin('admintools', 'admintools');
+$admin = new LEPTON_admin('admintools', 'admintools');
 
 /**
  *	Load Language file
@@ -69,7 +69,7 @@ if ($pagetodo > 0 && $is_pagetodo) {
 	</h4>
 	<?php
 
-
+    LEPTON_tools::load( LEPTON_PATH."/include/phplib/template.inc");
 	// Setup template object
 	$template = new Template(LEPTON_PATH.'/modules/pagecloner/templates');
 	$template->set_file('page', 'template.lte');
