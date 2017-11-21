@@ -57,6 +57,12 @@ $admin = new LEPTON_admin('admintools', 'admintools');
 $lang = (dirname(__FILE__))."/languages/". LANGUAGE .".php";
 require_once ( !file_exists($lang) ? (dirname(__FILE__))."/languages/EN.php" : $lang );
 
+/**	*******************************
+ *	Try to get the template-engine.
+ */
+global $parser, $loader;
+require( dirname(__FILE__)."/register_parser.php" );
+
 // And... action
 if ($pagetodo > 0 && $is_pagetodo) {
 	// write out admint tool header
@@ -68,12 +74,6 @@ if ($pagetodo > 0 && $is_pagetodo) {
 		-> <?php echo $is_pagetodo['menu_title'];?>
 	</h4>
 	<?php
-
-    LEPTON_tools::load( LEPTON_PATH."/include/phplib/template.inc");
-	// Setup template object
-	$template = new Template(LEPTON_PATH.'/modules/pagecloner/templates');
-	$template->set_file('page', 'template.lte');
-	$template->set_block('page', 'main_block', 'main');
 
 	// Parent page list
 
@@ -174,9 +174,11 @@ if ($pagetodo > 0 && $is_pagetodo) {
 		$template->set_var('DISPLAY_ADD', 'hide');
 	}
 
-	// Parse template object
-	$template->parse('main', 'main_block', false);
-	$template->pparse('output', 'page');
+	$twig_util->resolve_path("template.lte");
+	
+	echo $parser->render( 
+		$twig_modul_namespace."template.lte",
+		$pagecloner_vars
 }	
 $admin->print_footer();
 
