@@ -49,7 +49,7 @@ if (0 === count($aSourcePageInfo) )
 }
 
 $admin = new LEPTON_admin('admintools', 'admintools');
-
+require_once('info.php');
 /**
  *	Load Language file
  */
@@ -65,6 +65,7 @@ page_tree( 0, $all_pages );
         'MOD_PAGECLONER' => $MOD_PAGECLONER,
         'all_pages' => $all_pages,
         'new_page_name' => $aSourcePageInfo['page_title']." copy",
+		'module_name' => $module_name,				
         'source_page'   => $aSourcePageInfo
     );
     

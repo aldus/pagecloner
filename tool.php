@@ -36,6 +36,8 @@ if (defined('LEPTON_PATH')) {
 $lang = (dirname(__FILE__))."/languages/". LANGUAGE .".php";
 require_once ( !file_exists($lang) ? (dirname(__FILE__))."/languages/EN.php" : $lang );
 
+require_once('info.php');
+
 LEPTON_tools::register("page_tree");
 $all_pages = array();
 page_tree(0, $all_pages);
@@ -49,6 +51,7 @@ if($admin->get_permission('pages_view') == true) {
 		'IMAGE_URL' => LEPTON_URL.'/modules/lib_lepton/backend_images',		
 		'TEXT' => $TEXT,
 		'MOD_PAGECLONER' => $MOD_PAGECLONER,
+		'module_name' => $module_name,			
 		'editable_pages' => $all_pages
 	);
 
