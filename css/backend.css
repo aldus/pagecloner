@@ -33,3 +33,28 @@ ul, li {
 form.pagecloner {
     padding-top:54px !important;
 }
+
+table.pagecloner_pagelist {
+    border-spacing: 0px;
+    border-collapse: separate;
+    background-color: #EEEEEE;
+    width: 600px;
+}
+table.pagecloner_pagelist.head {
+    background-color: #CCCCCC;
+    margin-top:5px;
+    margin-bottom:5px;
+}
+
+
+table.pagecloner_pagelist td.toggle,
+table.pagecloner_pagelist.head td.toggle { width:20px; }
+
+table.pagecloner_pagelist td.title,
+table.pagecloner_pagelist.head td.title { width:120px; }
+
+table.pagecloner_pagelist td.menu,
+table.pagecloner_pagelist.head td.menu { width:120px; }
+
+table.pagecloner_pagelist td.visi,
+table.pagecloner_pagelist.head td.visi { width:120px; }
