@@ -18,25 +18,26 @@
 	</table>
 
 <div class="pages_list">
-	<table cellpadding="1" cellspacing="0" width="720" border="0">
+	<table class="pagecloner_pagelist head" >
 	<tr>
-		<td width="20">&nbsp;</td>
-		<td>{{ TEXT.PAGE_TITLE }}:</td>
-		<td width="375" align="left">{{ TEXT.MENU_TITLE }}:</td>
-		<td width="130" align="right">{{ TEXT.VISIBILITY }}:</td>
+		<td class="toggle">&nbsp;</td>
+		<td class="title">{{ TEXT.PAGE_TITLE }}:</td>
+		<td class="menu">{{ TEXT.MENU_TITLE }}:</td>
+		<td class="visi">{{ TEXT.VISIBILITY }}:</td>
 	</tr>
 	</table>
 
 {% macro display_page( pages, TEXT, MOD_PAGECLONER, IMAGE_URL, LEPTON_URL ) %}	
+
 		<ul id="p{{ pages[0].current_parent }}" {% if pages[0].current_parent != 0 %} class="pagelist" {% endif %}>
 
 		{% for page in pages %}
 			<li id="p{{ page.parent }}" style="padding: 2px 0px 2px 0px;">
-				<table width="720" cellpadding="1" cellspacing="0" border="0" style="background-color: #F0F0F0;">
+				<table class="pagecloner_pagelist">
 					<tr>
 						<!-- toggle-icon -->
-						<td width="20" style="padding-left: {{ (page.level * 20) }}px;">
-						{% if page.display_plus == 1 %}
+						<td class="toggle" style="padding-left: {{ (page.level * 20) }}px;">
+						{% if page.subpages|length > 0 %}
 						<a href="javascript: toggle_visibility('p{{ page.page_id }}');" title="{{ TEXT.EXPAND}}/{{ TEXT.COLLAPSE }}">
 							<img src="{{ IMAGE_URL }}/minus_16.png" onclick="toggle_plus_minus('{{ page.page_id }}');" name="plus_minus_{{ page.page_id }}" border="0" alt="+" />
 						</a>
@@ -44,26 +45,29 @@
 						</td>
 						
 						<!-- page-title -->
-						<td>
-							<a href="{{ LEPTON_URL }}/modules/pagecloner/tool_clone.php?pagetoclone={{ page.page_id }}" title="{{ MOD_PAGECLONER.CLONE_PAGE }}">{{ page.page_title }}</a>
+						<td class="title">
+							{% for i in 1..recursion_deep if recursion_deep > 0 %}- {% endfor %}<a href="{{ LEPTON_URL }}/modules/pagecloner/tool_clone.php?pagetoclone={{ page.page_id }}" title="{{ MOD_PAGECLONER.CLONE_PAGE }}">{{ page.page_title }}</a>
 						</td>
 						
 						<!-- menu-title -->
-						<td align="left" width="375">
+						<td class="menu"">
 							<font color="#999999">{{ page.menu_title }}</font>
 						</td>
 						
 						<!-- visibility -->
+
 						<td align="center" valign="middle" width="130">
 							<img src="{{ IMAGE_URL }}/{{ page.status_icon }}" alt="{{ TEXT.VISIBILITY}}: {{ page.status_text }}" border="0" />
+
 						</td>
 						
 					</tr>
 				</table>
 			</li>
-			{% if page.subpage != 0 %}
+			{% if page.subpages != 0 %}
 
 				{% import _self as page_ref %}
+
 				{{ page_ref.display_page( page.subpage, TEXT, MOD_PAGECLONER, IMAGE_URL, LEPTON_URL ) }}
 
 			{% endif %}
@@ -73,7 +77,9 @@
 {% endmacro %}
 	
 		{% import _self as page_ref %}
+
 		{{ page_ref.display_page( editable_pages, TEXT, MOD_PAGECLONER, IMAGE_URL, LEPTON_URL ) }}
+
 
 </div>
 	

@@ -30,27 +30,13 @@ if (defined('LEPTON_PATH')) {
 }
 // end include class.secure.php
 
-// tool_doclone.php
-// Where the actual cloning will take place
-
-// require_once(LEPTON_PATH.'/framework/class.admin.php');
-require_once(LEPTON_PATH.'/framework/summary.functions.php');
-// require_once(LEPTON_PATH.'/framework/class.order.php');
-
-// create admin object depending on platform (admin tools were moved out of settings with WB 2.7)
-if(file_exists(ADMIN_PATH .'/admintools/tool.php')) {
-	// since Website Baker 2.7
-	$admin = new LEPTON_admin('admintools', 'admintools');
-} else {
-	// Website Baker prior to 2.7
-	$admin = new LEPTON_admin('Settings', 'settings_advanced');
-}
+$admin = new LEPTON_admin('admintools', 'admintools');
 
 // First get the selected page
-$title = isset($_REQUEST["title"]) ?addslashes($_REQUEST['title']): '';
-$parent = isset($_REQUEST["parent"]) ?$_REQUEST["parent"] : '';
-$pagetoclone = isset($_REQUEST["pagetoclone"]) ? (int)$_REQUEST["pagetoclone"] : 0;
-$include_subs = isset($_REQUEST["include_subs"]) ? '1' : '0';
+$title = isset($_POST["title"]) ? addslashes($_POST['title']): '';
+$parent = isset($_POST["parent"]) ? $_POST["parent"] : '';
+$pagetoclone = isset($_POST["pagetoclone"]) ? intval($_POST["pagetoclone"]) : 0;
+$include_subs = isset($_POST["include_subs"]) ? '1' : '0';
 
 // Validate data
 if($title == '') {
@@ -68,7 +54,8 @@ function clone_page($title,$parent,$pagetoclone) {
 	$query = "SELECT * FROM ".TABLE_PREFIX."pages WHERE page_id = '$pagetoclone'";
 	$get_page = $database->query($query);	 
 	$is_page = $get_page->fetchRow(); 
-echo 'cloning---'.$pagetoclone.' to '.$parent;
+
+    echo 'cloning page '.$pagetoclone.' to '.$parent;
 	
 	// Work-out what the link and page filename should be
 	if($parent == '0') {
@@ -130,16 +117,7 @@ echo 'cloning---'.$pagetoclone.' to '.$parent;
 		"page_trail"	=> $is_page['page_trail'],
 		"viewing_users"	=> $is_page['viewing_users']
 	);
-		
-	/*
-	$query = "INSERT INTO ".TABLE_PREFIX."pages (page_title,menu_title,parent,template,target,position,visibility,searching,menu,language,admin_groups,viewing_groups,modified_when,modified_by) VALUES ('$title','$title','$parent','$template','_top','$position','$visibility','1','1','".DEFAULT_LANGUAGE."','$admin_groups','$viewing_groups','".TIME()."','".$admin->get_user_id()."')";
-
-	$database->query($query);
-	if($database->is_error()) {
-		$admin->print_error($database->get_error());
-	}
-	*/
-	
+			
 	$database->build_and_execute(
 		'insert',
 		TABLE_PREFIX."pages",
@@ -468,9 +446,7 @@ if ($include_subs == '1') {
 if($database->is_error()) {
 	$admin->print_error($database->get_error(),'tool_clone.php?pagetoclone='.$pagetoclone);
 } else {
-//	$admin->print_success($MESSAGE['PAGES']['ADDED'], ADMIN_URL.'/pages/modify.php?page_id='.$page_id);
 	$admin->print_success($MESSAGE['PAGES']['ADDED'], ADMIN_URL.'/admintools/tool.php?tool=pagecloner');
-	
 }
+
 $admin->print_footer();
-?>
