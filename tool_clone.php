@@ -56,48 +56,24 @@ $admin = new LEPTON_admin('admintools', 'admintools');
 $lang = (dirname(__FILE__))."/languages/". LANGUAGE .".php";
 require_once ( !file_exists($lang) ? (dirname(__FILE__))."/languages/EN.php" : $lang );
 
+LEPTON_tools::register("page_tree");
+$all_pages = array();
+page_tree( 0, $all_pages );
 
-/**	*******************************
- *	Try to get the template-engine.
- */
-global $parser, $loader;
-require( dirname(__FILE__)."/register_parser.php" );
-
-// And... action
-if ($pagetodo > 0 && $is_pagetodo) {
-	// write out admint tool header
-	?>
-	<h4 style="margin: 0; border-bottom: 1px solid #DDD; padding-bottom: 5px;">
-		<a href="<?php echo $admintool_link;?>"><?php echo $HEADING['ADMINISTRATION_TOOLS']; ?></a>
-		->
-		<a href="<?php echo $pageclone_link;?>">Page Cloner Tree</a>
-		-> <?php echo $is_pagetodo['menu_title'];?>
-	</h4>
-	<?php
-
-	// Parent page list
-
-	function parent_list($parent) {
-		global $admin, $database, $template;
-	
-		$admin_group_id = $admin->get_group_id();
-		$admin_user_id = $admin->get_user_id();
-	
-		$all_pages = array();
-
-	
-echo $oTwig->render(
-    "@pagecloner/modify_clone_settings.lte",
-    $aPageValues
-);
-
-
-	$twig_util->resolve_path("template.lte");
-	
-	echo $parser->render( 
-		$twig_modul_namespace."template.lte",
-		$pagecloner_vars
-}	
+    $aPageValues = array(
+        'leptoken' => get_leptoken(),
+        'MOD_PAGECLONER' => $MOD_PAGECLONER,
+        'all_pages' => $all_pages,
+        'new_page_name' => $aSourcePageInfo['page_title']." copy",
+        'source_page'   => $aSourcePageInfo
+    );
+    
+	$oTwig = lib_twig_box::getInstance();
+	$oTwig->registerModule("pagecloner");
+    echo $oTwig->render(
+        "@pagecloner/modify_clone_settings.lte",
+        $aPageValues
+    );
 
 $admin->print_footer();
 
