@@ -78,11 +78,11 @@ echo 'cloning---'.$pagetoclone.' to '.$parent;
 		$parent_section = '';
 		$parent_titles = array_reverse(get_parent_titles($parent));
 		foreach($parent_titles AS $parent_title) {
-			$parent_section .= page_filename($parent_title).'/';
+			$parent_section .= save_filename($parent_title).'/';
 		}
 		if($parent_section == '/') { $parent_section = ''; }
-		$link = '/'.$parent_section.page_filename($title);
-		$filename = LEPTON_PATH.PAGES_DIRECTORY.'/'.$parent_section.page_filename($title).'.php';
+		$link = '/'.$parent_section.save_filename($title);
+		$filename = LEPTON_PATH.PAGES_DIRECTORY.'/'.$parent_section.save_filename($title).'.php';
 		make_dir(LEPTON_PATH.PAGES_DIRECTORY.'/'.$parent_section);
 	}
 	
