@@ -34,7 +34,7 @@ $admin = new LEPTON_admin('admintools', 'admintools');
 
 // First get the selected page
 $title = isset($_POST["title"]) ? addslashes($_POST['title']): '';
-$parent = isset($_POST["parent"]) ? $_POST["parent"] : '';
+$parent = isset($_POST["parent"]) ? intval($_POST["parent"]) : 0;
 $pagetoclone = isset($_POST["pagetoclone"]) ? intval($_POST["pagetoclone"]) : 0;
 $include_subs = isset($_POST["include_subs"]) ? '1' : '0';
 
@@ -44,17 +44,26 @@ if($title == '') {
 }
 
 // The actual pagecloning
-function clone_page($title,$parent,$pagetoclone) {
+function clone_page($title, $parent, $pagetoclone) {
 	// Get objects and vars from outside this function
-	global $admin, $template, $database, $TEXT, $MOD_PAGECLONER, $MESSAGE;
+	global $admin, $TEXT, $MOD_PAGECLONER, $MESSAGE;
 	
-	// Get page list from database
-
+	$database = LEPTON_database::getInstance();
+	
 	// Get values from page to clone from:
-	$query = "SELECT * FROM ".TABLE_PREFIX."pages WHERE page_id = '$pagetoclone'";
-	$get_page = $database->query($query);	 
-	$is_page = $get_page->fetchRow(); 
-
+	$is_page = array();
+	$database->execute_query(
+	    "SELECT * FROM `".TABLE_PREFIX."pages` WHERE `page_id` = ".$pagetoclone,
+	    true,
+	    $is_page,
+	    false
+	);
+    
+    if( 0 === count($is_page) ) 
+    {
+        $admin->print_error("No page-data found! [23]", ADMIN_URL.'/admintools/tool.php?tool=pagecloner');
+    }
+    
     echo 'cloning page '.$pagetoclone.' to '.$parent;
 	
 	// Work-out what the link and page filename should be
