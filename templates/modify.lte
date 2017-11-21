@@ -27,7 +27,7 @@
 	</tr>
 	</table>
 
-{% macro display_page( pages, TEXT, MOD_PAGECLONER, IMAGE_URL, LEPTON_URL ) %}	
+{% macro display_page( pages, MOD_PAGECLONER, IMAGE_URL, recursion_deep ) %}	
 
 		<ul id="p{{ pages[0].current_parent }}" {% if pages[0].current_parent != 0 %} class="pagelist" {% endif %}>
 
@@ -50,7 +50,7 @@
 						</td>
 						
 						<!-- menu-title -->
-						<td class="menu"">
+						<td class="menu">
 							<font color="#999999">{{ page.menu_title }}</font>
 						</td>
 						
@@ -68,7 +68,7 @@
 
 				{% import _self as page_ref %}
 
-				{{ page_ref.display_page( page.subpage, TEXT, MOD_PAGECLONER, IMAGE_URL, LEPTON_URL ) }}
+				{{ page_ref.display_page( page.subpage, MOD_PAGECLONER, IMAGE_URL, recursion_deep+1 ) }}
 
 			{% endif %}
 
@@ -78,7 +78,7 @@
 	
 		{% import _self as page_ref %}
 
-		{{ page_ref.display_page( editable_pages, TEXT, MOD_PAGECLONER, IMAGE_URL, LEPTON_URL ) }}
+		{{ page_ref.display_page( editable_pages, MOD_PAGECLONER, IMAGE_URL, 0 ) }}
 
 
 </div>

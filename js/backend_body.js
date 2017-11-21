@@ -27,10 +27,10 @@ function toggle_visibility(id){
 }
 
 var plus = new Image;
-plus.src = LEPTON_URL+"/modules/lib_lepton/backend_images/plus_16.png";
+plus.src = IMAGE_URL+"/plus_16.png";
 
 var minus = new Image;
-minus.src = LEPTON_URL+"/modules/lib_lepton/backend_images/minus_16.png";
+minus.src = IMAGE_URL+"/minus_16.png";
 
 function toggle_plus_minus(id) {
 	var img_src = document.images['plus_minus_' + id].src;
