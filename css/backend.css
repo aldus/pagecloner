@@ -45,16 +45,21 @@ table.pagecloner_pagelist.head {
     margin-top:5px;
     margin-bottom:5px;
 }
+table.pagecloner_pagelist tr {
+    margin-bottom: 10px;
+    height:20px;
+}
 
+td.pagelist_toggle,
+table.pagecloner_pagelist.head td.toggle { width:23px; }
 
-table.pagecloner_pagelist td.toggle,
-table.pagecloner_pagelist.head td.toggle { width:20px; }
-
-table.pagecloner_pagelist td.title,
+td.pagelist_title,
 table.pagecloner_pagelist.head td.title { width:120px; }
 
-table.pagecloner_pagelist td.menu,
+td.pagelist_menu,
 table.pagecloner_pagelist.head td.menu { width:120px; }
 
-table.pagecloner_pagelist td.visi,
+td.pagelist_visi,
 table.pagecloner_pagelist.head td.visi { width:120px; }
+
+td.pagelist_toggle img{ padding-left:5px;}

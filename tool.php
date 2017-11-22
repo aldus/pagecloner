@@ -48,7 +48,7 @@ if($admin->get_permission('pages_view') == true) {
 	$pagecloner_vars = array(
 		'THEME_URL'	=> THEME_URL,
 		'LEPTON_URL' => LEPTON_URL,
-		'IMAGE_URL' => LEPTON_URL.'/modules/lib_lepton/backend_images',		
+		'IMAGE_URL' => (DEFAULT_THEME =="algos" ) ? LEPTON_URL.'/templates/algos/images' : LEPTON_URL.'/modules/lib_lepton/backend_images',		
 		'TEXT' => $TEXT,
 		'MOD_PAGECLONER' => $MOD_PAGECLONER,
 		'module_name' => $module_name,			
