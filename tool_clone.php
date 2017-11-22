@@ -60,6 +60,7 @@ page_tree( 0, $all_pages );
 
     $aPageValues = array(
         'LEPTON_URL' => LEPTON_URL,
+        'IMAGE_URL' => (DEFAULT_THEME =="algos" ) ? LEPTON_URL.'/templates/algos/images' : LEPTON_URL.'/modules/lib_lepton/backend_images',		
         'leptoken' => get_leptoken(),
         'MOD_PAGECLONER' => $MOD_PAGECLONER,
         'all_pages' => $all_pages,

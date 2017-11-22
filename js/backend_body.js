@@ -40,3 +40,19 @@ function toggle_plus_minus(id) {
 		document.images['plus_minus_' + id].src = plus.src;
 	}
 }
+
+function call_subpage(aID)
+{
+    var ref = document.getElementById("pagecloner_caller");
+    if(ref) {
+        var temp_element = document.createElement("input");
+        if(temp_element) {
+            temp_element.setAttribute("type", "hidden" );
+            temp_element.setAttribute("name", "pagetoclone" );
+            temp_element.setAttribute("value", aID );
+    
+            ref.appendChild( temp_element );
+            ref.submit();
+        }
+    }  
+}

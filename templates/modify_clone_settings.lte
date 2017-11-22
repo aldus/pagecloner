@@ -14,6 +14,10 @@
     {% endfor %}
 {% endmacro %}
 
+<script type="text/javascript" language="javascript">
+	var IMAGE_URL = "{{ IMAGE_URL }}";
+</script>
+
 <div class="ui header">
     {{ MOD_PAGECLONER.CLONE_FROM }} "{{ source_page.page_title }}" [id: {{ source_page.page_id }}]
 </div>

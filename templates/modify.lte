@@ -67,28 +67,12 @@
 		{{ page_ref.display_page( editable_pages, MOD_PAGECLONER, IMAGE_URL, 0 ) }}
 
 </div>
+
 <div class="hidden">
-<form id="pagecloner_caller" method="post" action="{{ ADMIN_URL }}/admintools/tool.php?tool=pagecloner">
-    <input type="hidden" name="leptoken" value="{{ leptoken }}" />
-    <input type="hidden" name="pagetoclone" value="0" />
-    <input type="hidden" name="pagecloner_job" value="display_details" />
-</form>
-<script>
-    function call_subpage(aID)
-    {
-        var ref = document.getElementById("pagecloner_caller");
-        if(ref) {
-            var temp_element = document.createElement("input");
-		    if(temp_element) {
-			    temp_element.setAttribute("type", "hidden" );
-    			temp_element.setAttribute("name", "pagetoclone" );
-	    		temp_element.setAttribute("value", aID );
-		
-			    ref.appendChild( temp_element );
-			    ref.submit();
-		    }
-        }  
-    }
-</script>
+    <form id="pagecloner_caller" method="post" action="{{ ADMIN_URL }}/admintools/tool.php?tool=pagecloner">
+        <input type="hidden" name="leptoken" value="{{ leptoken }}" />
+        <input type="hidden" name="pagecloner_job" value="display_details" />
+    </form>
 </div>
+
 {% endautoescape %}
