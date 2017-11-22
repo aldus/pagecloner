@@ -5,17 +5,7 @@
 
 <p class="introtext">{{ MOD_PAGECLONER.INTRO_TEXT }}</p>
 
-
-	<table cellpadding="0" cellspacing="0" width="100%" border="0">
-	<tr>
-		<td>
-			<h2>{{ MOD_PAGECLONER.CHOOSE_PAGE }}</h2>
-		</td>
-		<td align="right">
-			{{ trash_page }}
-		</td>
-	</tr>
-	</table>
+<h2>{{ MOD_PAGECLONER.CHOOSE_PAGE }}</h2>
 
 <div class="pages_list">
 	<table class="pagecloner_pagelist head" >
@@ -46,7 +36,7 @@
 
 						<!-- page-title -->
 						<td class="pagelist_title">
-							{% for i in 1..recursion_deep if recursion_deep > 0 %}- {% endfor %}<a href="{{ LEPTON_URL }}/modules/pagecloner/tool_clone.php?pagetoclone={{ page.page_id }}" title="{{ MOD_PAGECLONER.CLONE_PAGE }}">{{ page.page_title }}</a>
+							{% for i in 1..recursion_deep if recursion_deep > 0 %}- {% endfor %}<a href="#" onclick="call_subpage({{ page.page_id }});" title="{{ MOD_PAGECLONER.CLONE_PAGE }}">{{ page.page_title }}</a>
 						</td>
 
 						<!-- menu-title -->
@@ -77,5 +67,28 @@
 		{{ page_ref.display_page( editable_pages, MOD_PAGECLONER, IMAGE_URL, 0 ) }}
 
 </div>
-	
+<div class="hidden">
+<form id="pagecloner_caller" method="post" action="{{ ADMIN_URL }}/admintools/tool.php?tool=pagecloner">
+    <input type="hidden" name="leptoken" value="{{ leptoken }}" />
+    <input type="hidden" name="pagetoclone" value="0" />
+    <input type="hidden" name="pagecloner_job" value="display_details" />
+</form>
+<script>
+    function call_subpage(aID)
+    {
+        var ref = document.getElementById("pagecloner_caller");
+        if(ref) {
+            var temp_element = document.createElement("input");
+		    if(temp_element) {
+			    temp_element.setAttribute("type", "hidden" );
+    			temp_element.setAttribute("name", "pagetoclone" );
+	    		temp_element.setAttribute("value", aID );
+		
+			    ref.appendChild( temp_element );
+			    ref.submit();
+		    }
+        }  
+    }
+</script>
+</div>
 {% endautoescape %}

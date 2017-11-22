@@ -18,7 +18,7 @@
     {{ MOD_PAGECLONER.CLONE_FROM }} "{{ source_page.page_title }}" [id: {{ source_page.page_id }}]
 </div>
     
-<form class="ui form pagecloner" action="tool_doclone.php" method="post">
+<form class="ui form pagecloner" action="{{ LEPTON_URL }}/modules/pagecloner/tool_doclone.php" method="post">
     <input type="hidden" name="pagetoclone" value="{{ source_page.page_id }}"  />
     <input type="hidden" name="leptoken" value="{{ leptoken }}" />
     

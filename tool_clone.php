@@ -30,7 +30,7 @@ if (defined('LEPTON_PATH')) {
 }
 // end include class.secure.php
 
-$pagetodo = isset($_GET['pagetoclone']) ? (int) $_GET['pagetoclone'] : 0;
+$pagetodo = isset($_POST['pagetoclone']) ? (int) $_POST['pagetoclone'] : 0;
 
 if(0 === $pagetodo) die("no! [1]");
 
@@ -48,8 +48,6 @@ if (0 === count($aSourcePageInfo) )
     die(header("Location: ".ADMIN_URL ."/admintools/tool.php?tool=pagecloner"));
 }
 
-$admin = new LEPTON_admin('admintools', 'admintools');
-require_once('info.php');
 /**
  *	Load Language file
  */
@@ -61,11 +59,11 @@ $all_pages = array();
 page_tree( 0, $all_pages );
 
     $aPageValues = array(
+        'LEPTON_URL' => LEPTON_URL,
         'leptoken' => get_leptoken(),
         'MOD_PAGECLONER' => $MOD_PAGECLONER,
         'all_pages' => $all_pages,
         'new_page_name' => $aSourcePageInfo['page_title']." copy",
-		'module_name' => $module_name,				
         'source_page'   => $aSourcePageInfo
     );
     

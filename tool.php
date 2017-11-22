@@ -30,13 +30,21 @@ if (defined('LEPTON_PATH')) {
 }
 // end include class.secure.php
 
+
+if(isset($_POST['pagecloner_job']))
+{
+    if($_POST['pagecloner_job'] == "display_details")
+    {
+        require __dir__."/tool_clone.php";
+        die();
+    }
+}
+
 /**
  *	Load Language file
  */
 $lang = (dirname(__FILE__))."/languages/". LANGUAGE .".php";
 require_once ( !file_exists($lang) ? (dirname(__FILE__))."/languages/EN.php" : $lang );
-
-require_once('info.php');
 
 LEPTON_tools::register("page_tree");
 $all_pages = array();
@@ -50,8 +58,7 @@ if($admin->get_permission('pages_view') == true) {
 		'LEPTON_URL' => LEPTON_URL,
 		'IMAGE_URL' => (DEFAULT_THEME =="algos" ) ? LEPTON_URL.'/templates/algos/images' : LEPTON_URL.'/modules/lib_lepton/backend_images',		
 		'TEXT' => $TEXT,
-		'MOD_PAGECLONER' => $MOD_PAGECLONER,
-		'module_name' => $module_name,			
+		'MOD_PAGECLONER' => $MOD_PAGECLONER,	
 		'editable_pages' => $all_pages
 	);
 
