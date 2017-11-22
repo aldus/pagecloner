@@ -36,7 +36,7 @@
 
 						<!-- page-title -->
 						<td class="pagelist_title">
-							{% for i in 1..recursion_deep if recursion_deep > 0 %}- {% endfor %}<a href="#" onclick="call_subpage({{ page.page_id }});" title="{{ MOD_PAGECLONER.CLONE_PAGE }}">{{ page.page_title }}</a>
+							{% for i in 1..recursion_deep if recursion_deep > 0 %}- {% endfor %}<a href="#" onclick="call_detailpage({{ page.page_id }});" title="{{ MOD_PAGECLONER.CLONE_PAGE }}">{{ page.page_title }}</a>
 						</td>
 
 						<!-- menu-title -->

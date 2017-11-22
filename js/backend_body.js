@@ -1,7 +1,7 @@
 /**
  *	AdminTool: PageCloner - backend.js
  *
- *	@version:	0.1.0
+ *	@version:	1.3.0
  *	@author:	cms-lab
  */
 
@@ -33,15 +33,11 @@ var minus = new Image;
 minus.src = IMAGE_URL+"/minus_16.png";
 
 function toggle_plus_minus(id) {
-	var img_src = document.images['plus_minus_' + id].src;
-	if(img_src == plus.src) {
-		document.images['plus_minus_' + id].src = minus.src;
-	} else {
-		document.images['plus_minus_' + id].src = plus.src;
-	}
+	var img_ref= document.images['plus_minus_' + id];
+    img_ref.src = (img_ref.src == plus.src) ? minus.src : plus.src;
 }
 
-function call_subpage(aID)
+function call_detailpage(aID)
 {
     var ref = document.getElementById("pagecloner_caller");
     if(ref) {
