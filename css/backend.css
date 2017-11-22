@@ -2,10 +2,11 @@
  *	Modul: pagecloner - backend.css
  */
 
-table {
-/*	outline: 1px solid #990000; */
+.spacer {
+    display: block;
+    width:12px;
+    height: 24px;
 }
-
 .introtext {
 	display:block;
 	float: left;
@@ -31,7 +32,12 @@ ul, li {
 }
 
 form.pagecloner {
-    padding-top:54px !important;
+    padding-top:14px !important;
+}
+
+form.pagecloner label {
+    min-width:110px;
+    display:inline-block;
 }
 
 table.pagecloner_pagelist {

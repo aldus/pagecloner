@@ -47,6 +47,8 @@
         <input type="checkbox" id="pagecloner_subs" name="include_subs" value="1" />
     </div>
 
+    <div class="spacer"></div>
+    
     <div class="ui element">
         <input class="positive ui button lepsem_submit" type="submit" name="submit" value="{{ MOD_PAGECLONER.ADD }}" />
         <input class="red ui button lepsem_cancel" type="button" name="cancel" value="{{ MOD_PAGECLONER.ABORT }}" onclick="document.location.href='{{ ADMIN_URL }}/admintools/tool.php?tool=pagecloner';" />		
