@@ -20,7 +20,7 @@ function toggle_viewers() {
 
 function toggle_visibility(id){
 	if(document.getElementById(id).style.display == "none") {
-		document.getElementById(id).style.display = "block";
+		document.getElementById(id).style.display = "table-row";
 	} else {
 		document.getElementById(id).style.display = "none";
 	}
@@ -33,7 +33,7 @@ var minus = new Image;
 minus.src = IMAGE_URL+"/minus_16.png";
 
 function toggle_plus_minus(id) {
-	var img_ref= document.images['plus_minus_' + id];
+	var img_ref= document.getElementById('plus_minus_' + id);
     img_ref.src = (img_ref.src == plus.src) ? minus.src : plus.src;
 }
 
