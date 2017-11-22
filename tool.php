@@ -45,8 +45,9 @@ if(isset($_POST['pagecloner_job']))
  */
 $lang = (dirname(__FILE__))."/languages/". LANGUAGE .".php";
 require_once ( !file_exists($lang) ? (dirname(__FILE__))."/languages/EN.php" : $lang );
+require_once('info.php');
 
-LEPTON_tools::register("page_tree");
+LEPTON_handle::register("page_tree");
 $all_pages = array();
 page_tree(0, $all_pages);
 
@@ -56,8 +57,9 @@ if($admin->get_permission('pages_view') == true) {
 	$pagecloner_vars = array(
 		'THEME_URL'	=> THEME_URL,
 		'LEPTON_URL' => LEPTON_URL,
-		'IMAGE_URL' => (DEFAULT_THEME =="algos" ) ? LEPTON_URL.'/templates/algos/images' : LEPTON_URL.'/modules/lib_lepton/backend_images',		
+		'IMAGE_URL' => LEPTON_URL.'/modules/lib_lepton/backend_images',		
 		'TEXT' => $TEXT,
+		'module_name' => $module_name,		
 		'MOD_PAGECLONER' => $MOD_PAGECLONER,	
 		'editable_pages' => $all_pages
 	);

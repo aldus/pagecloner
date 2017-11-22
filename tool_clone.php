@@ -53,8 +53,8 @@ if (0 === count($aSourcePageInfo) )
  */
 $lang = (dirname(__FILE__))."/languages/". LANGUAGE .".php";
 require_once ( !file_exists($lang) ? (dirname(__FILE__))."/languages/EN.php" : $lang );
-
-LEPTON_tools::register("page_tree");
+require_once('info.php');
+LEPTON_handle::register("page_tree");
 $all_pages = array();
 page_tree( 0, $all_pages );
 
@@ -63,6 +63,7 @@ page_tree( 0, $all_pages );
         'IMAGE_URL' => (DEFAULT_THEME =="algos" ) ? LEPTON_URL.'/templates/algos/images' : LEPTON_URL.'/modules/lib_lepton/backend_images',		
         'leptoken' => get_leptoken(),
         'MOD_PAGECLONER' => $MOD_PAGECLONER,
+		'module_name' => $module_name,		
         'all_pages' => $all_pages,
         'new_page_name' => $aSourcePageInfo['page_title']." copy",
         'source_page'   => $aSourcePageInfo
