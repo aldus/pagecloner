@@ -29,7 +29,7 @@
 						<td class="pagelist_toggle" style="padding-left: {{ (page.level * 20) }}px;">
 						{% if page.subpages|length > 0 %}
 						<a href="javascript: toggle_visibility('p{{ page.page_id }}');" title="{{ TEXT.EXPAND}}/{{ TEXT.COLLAPSE }}">
-							<img src="{{ IMAGE_URL }}/plus_16.png" onclick="toggle_plus_minus('{{ page.page_id }}');" name="plus_minus_{{ page.page_id }}" border="0" alt="+" />
+							<img src="{{ IMAGE_URL }}/plus_16.png" onclick="toggle_plus_minus('{{ page.page_id }}');" id="plus_minus_{{ page.page_id }}" border="0" alt="+" />
 						</a>
 						{% endif %}
 						</td>
