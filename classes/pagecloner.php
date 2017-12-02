@@ -11,7 +11,7 @@
  *
  */
 
-class pagecloner extends LEPTON_class
+class pagecloner extends LEPTON_abstract
 {
     /**
      *  The "own" instance of this class.
